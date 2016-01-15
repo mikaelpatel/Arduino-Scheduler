@@ -38,7 +38,7 @@ void setup()
   Serial.flush();
 
   start = micros();
-  scheduler.begin();
+  Scheduler.begin();
   stop = micros();
   us = stop - start;
   Serial.print(F("1. Initiate scheduler and main thread: "));
@@ -56,7 +56,7 @@ void setup()
   Serial.println(F(" us"));
 
   start = micros();
-  scheduler.start(incrementCounter);
+  Scheduler.start(incrementCounter);
   stop = micros();
   us = stop - start;
   Serial.print(F("3. Start a thread: "));

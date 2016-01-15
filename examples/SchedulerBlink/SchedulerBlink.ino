@@ -22,23 +22,17 @@
 
 #include <Scheduler.h>
 
-void blink(int pin, unsigned long ms)
-{
-  digitalWrite(pin, HIGH);
-  delay(ms);
-  digitalWrite(pin, LOW);
-  delay(ms);
-}
-
 void setup()
 {
+  // Initiate pins
   pinMode(13, OUTPUT);
   pinMode(12, OUTPUT);
   pinMode(11, OUTPUT);
 
-  scheduler.begin();
-  scheduler.start(loop2);
-  scheduler.start(loop3);
+  // Initiate scheduler and threads
+  Scheduler.begin();
+  Scheduler.start(loop2);
+  Scheduler.start(loop3);
 }
 
 void loop()
@@ -54,5 +48,13 @@ void loop2()
 void loop3()
 {
   blink(11, 1000);
+}
+
+void blink(int pin, unsigned long ms)
+{
+  digitalWrite(pin, HIGH);
+  delay(ms);
+  digitalWrite(pin, LOW);
+  delay(ms);
 }
 

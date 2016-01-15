@@ -19,34 +19,41 @@
 #include "Scheduler.h"
 #include <alloca.h>
 
-Scheduler scheduler;
+#define UNUSED(x) (void) (x)
 
-Scheduler::thread_t Scheduler::s_main;
-Scheduler::thread_t* Scheduler::s_running = &Scheduler::s_main;
-size_t Scheduler::s_top = Scheduler::DEFAULT_STACK_SIZE;
+SchedulerClass Scheduler;
 
-void Scheduler::begin(size_t stackSize)
+SchedulerClass::thread_t SchedulerClass::s_main = {
+  &SchedulerClass::s_main,
+  { 0 }
+};
+
+SchedulerClass::thread_t* SchedulerClass::s_running = &SchedulerClass::s_main;
+
+size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
+
+void SchedulerClass::begin(size_t stackSize)
 {
-  s_main.next = &s_main;
   s_top = stackSize;
 }
 
-void Scheduler::start(loopFunc loop, size_t stackSize)
+void SchedulerClass::start(loopFunc loop, size_t stackSize)
 {
   void* stack = alloca(s_top);
   s_top += stackSize;
   init(stack, loop);
 }
 
-void Scheduler::yield()
+void SchedulerClass::yield()
 {
   if (setjmp(s_running->context)) return;
   s_running = s_running->next;
   longjmp(s_running->context, 1);
 }
 
-void Scheduler::init(void* stack, loopFunc loop)
+void SchedulerClass::init(void* stack, loopFunc loop)
 {
+  UNUSED(stack);
   thread_t thread;
   thread.next = s_main.next;
   s_main.next = &thread;

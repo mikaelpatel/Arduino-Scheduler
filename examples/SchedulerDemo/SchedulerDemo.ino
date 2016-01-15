@@ -34,11 +34,11 @@ void setup()
 
   Serial.print(millis());
   Serial.println(F(":setup"));
-  scheduler.begin();
+  Scheduler.begin();
   setup2();
-  scheduler.start(loop2);
+  Scheduler.start(loop2);
   setup3();
-  scheduler.start(loop3);
+  Scheduler.start(loop3);
 }
 
 void loop()
