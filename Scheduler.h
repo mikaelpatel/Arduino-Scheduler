@@ -78,4 +78,12 @@ protected:
 
 extern SchedulerClass Scheduler;
 
+/**
+ * Syntactic sugar for scheduler based busy-wait for condition.
+ * Yield until condition is valid. May require volatile condition
+ * variables.
+ * @param[in] cond condition to await.
+ */
+#define await(cond) while (!(cond)) yield()
+
 #endif

@@ -22,12 +22,16 @@
 
 #include <Scheduler.h>
 
+const int led1 = 13;
+const int led2 = 12;
+const int led3 = 11;
+
 void setup()
 {
   // Initiate pins
-  pinMode(13, OUTPUT);
-  pinMode(12, OUTPUT);
-  pinMode(11, OUTPUT);
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
 
   // Initiate scheduler and threads
   Scheduler.begin();
@@ -37,20 +41,20 @@ void setup()
 
 void loop()
 {
-  blink(13, 500);
+  blink(led1, 500);
 }
 
 void loop2()
 {
-  blink(12, 250);
+  blink(led2, 250);
 }
 
 void loop3()
 {
-  blink(11, 1000);
+  blink(led3, 1000);
 }
 
-void blink(int pin, unsigned long ms)
+void blink(int pin, unsigned int ms)
 {
   digitalWrite(pin, HIGH);
   delay(ms);

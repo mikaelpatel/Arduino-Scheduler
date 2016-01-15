@@ -43,17 +43,12 @@ void setup()
 
 void loop()
 {
-  unsigned int ms = period;
-  if (ms != 0) {
-    digitalWrite(LED, HIGH);
-    delay(ms);
-    digitalWrite(LED, LOW);
-    ms = period;
-    if (ms != 0) delay(ms);
-  }
-  else {
-    yield();
-  }
+  await(period != 0);
+  digitalWrite(LED, HIGH);
+  delay(period);
+  digitalWrite(LED, LOW);
+  if (period == 0) return;
+  delay(period);
 }
 
 void controllerLoop()
@@ -61,7 +56,7 @@ void controllerLoop()
   unsigned int ms = 100;
   for (; ms < 1000; ms += 100) {
     delay(2000);
-    if (period == 0) break;
+    if (period == 0) return;
     period = ms;
     Serial.print(millis());
     Serial.print(F(":period = "));
@@ -69,7 +64,7 @@ void controllerLoop()
   }
   for (; ms > 100; ms -= 100) {
     delay(2000);
-    if (period == 0) break;
+    if (period == 0) return;
     period = ms;
     Serial.print(millis());
     Serial.print(F(":period = "));
@@ -79,18 +74,25 @@ void controllerLoop()
 
 void buttonLoop()
 {
-  if (Serial.available()) {
-    int c = Serial.read();
-    if (c == '0') {
-      Serial.print(millis());
-      Serial.println(F(":LED off"));
-      period = 0;
-    }
-    else if (c == '1') {
-      Serial.print(millis());
-      Serial.println(F(":LED on"));
-      period = 100;
-    }
+  unsigned long start = millis();
+  await(Serial.available() != 0);
+  unsigned long stop = millis();
+  unsigned long ms = stop - start;
+  int c = Serial.read();
+  if (c == '0' && period != 0) {
+    Serial.print(stop);
+    Serial.print(':');
+    Serial.print(ms);
+    Serial.println(F(":LED off"));
+    period = 0;
   }
-  yield();
+  else if (c == '1' && period == 0) {
+    Serial.print(stop);
+    Serial.print(':');
+    Serial.print(ms);
+    Serial.println(F(":LED on"));
+    period = 100;
+  }
 }
+
+

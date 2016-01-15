@@ -42,23 +42,18 @@ void loop()
 
 void debounceLoop()
 {
-  const unsigned long DEBOUNCE = 50L;
+  const unsigned int DEBOUNCE = 50;
   const int BUTTON = 4;
   pinMode(BUTTON, INPUT_PULLUP);
-  int previous = digitalRead(BUTTON);
+  int state = digitalRead(BUTTON);
   while (1) {
-    int current = digitalRead(BUTTON);
-    if (current != previous) {
-      previous = current;
-      if (current)
-	buttonUp();
-      else
-	buttonDown();
-      delay(DEBOUNCE);
-    }
-    else {
-      yield();
-    }
+    await(digitalRead(BUTTON) != state);
+    state = !state;
+    if (state)
+      buttonUp();
+    else
+      buttonDown();
+    delay(DEBOUNCE);
   }
 }
 
