@@ -45,6 +45,11 @@ public:
    */
   static void start(loopFunc loop, size_t stackSize = DEFAULT_STACK_SIZE);
 
+  /**
+   * Context switch to next thread.
+   */
+  static void yield();
+
 protected:
   /**
    * Initiate the given loop function as a thread with the given stack.
@@ -52,11 +57,6 @@ protected:
    * @param[in] loop thread function.
    */
   static void init(void* stack, loopFunc loop);
-
-  /**
-   * Context switch to next thread.
-   */
-  static void yield();
 
   /**
    * Thread run-time structure.
@@ -74,20 +74,8 @@ protected:
 
   /** Thread stack allocation top. */
   static size_t s_top;
-
-  friend void ::yield();
 };
 
 extern SchedulerClass Scheduler;
-
-/**
- * Context switch to next thread. Replace core implementation.
- * Note: Scheduler header may only be included in sketch to avoid
- * multiple definitions of yield.
- */
-void yield()
-{
-  Scheduler.yield();
-}
 
 #endif

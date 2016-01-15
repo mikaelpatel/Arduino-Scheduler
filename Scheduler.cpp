@@ -60,4 +60,9 @@ void SchedulerClass::init(void* stack, loopFunc loop)
   if (setjmp(thread.context)) while (1) loop();
 }
 
+extern "C"
+void yield(void)
+{
+  Scheduler.yield();
+}
 
