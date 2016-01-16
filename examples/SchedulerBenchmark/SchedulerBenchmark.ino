@@ -19,25 +19,26 @@
  * Benchmark Scheduler library.
  *
  * @section Results Arduino 1.6.7, Mega 2560
+ * SchedulerBenckmark: started
  * 1. Initiate scheduler and main thread: 4 us
  * 2. Yield main thread: 12 us
- * 3. Start a thread: 24 us
+ * 3. Start a thread: 16 us
  * 4. Yield between two threads: 26 us
  * 5. Delay 10 ms and check increments: 338, 10028:29 us
- * 6. Start 59 threads: 828:14 us
- * 7. Yield and check increments: 60, 784:13 us
- * 8. Delay 10 ms and check increments: 780, 10764:13 us
+ * 6. Start 58 threads: 880:15 us
+ * 7. Yield and check increments: 59, 772:13 us
+ * 8. Delay 10 ms and check increments: 767, 10592:13 us
  *
  * @section Results Arduino 1.6.7, Pro-Mini
  * SchedulerBenckmark: started
  * 1. Initiate scheduler and main thread: 4 us
  * 2. Yield main thread: 11 us
- * 3. Start a thread: 24 us
+ * 3. Start a thread: 16 us
  * 4. Yield between two threads: 22 us
  * 5. Delay 10 ms and check increments: 381, 10028:26 us
- * 6. Start 11 threads: 148:13 us
- * 7. Yield and check increments: 12, 148:12 us
- * 8. Delay 10 ms and check increments: 768, 10064:13 us
+ * 6. Start 10 threads: 148:14 us
+ * 7. Yield and check increments: 11, 136:12 us
+ * 8. Delay 10 ms and check increments: 759, 10032:13 us
  */
 
 #include <Scheduler.h>
@@ -72,6 +73,7 @@ void setup()
   Serial.print(F("2. Yield main thread: "));
   Serial.print(us);
   Serial.println(F(" us"));
+  Serial.flush();
 
   // 3. Measure start of thread
   start = micros();
