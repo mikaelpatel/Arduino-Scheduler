@@ -32,18 +32,6 @@ void setup()
   Serial.begin(57600);
   Serial.println(F("SchedulerDemo: started"));
 
-  // Allocate and deallocate a buffer with a delay
-  void* buf = malloc(64);
-  Serial.print(millis());
-  Serial.print(F(":setup:alloc:buf=0x"));
-  Serial.println((int) buf, HEX);
-  delay(100);
-  Serial.print(millis());
-  Serial.print(F(":setup:free:buf=0x"));
-  Serial.println((int) buf, HEX);
-  free(buf);
-  buf = NULL;
-
   // Initiate threads
   Scheduler.begin();
   setup2();
@@ -62,18 +50,6 @@ void loop()
   Serial.print(F(":loop::i="));
   Serial.println(i++);
   delay(500);
-
-  // Allocate and deallocate a buffer with a delay
-  void* buf = malloc(64);
-  Serial.print(millis());
-  Serial.print(F(":loop:alloc:buf=0x"));
-  Serial.println((int) buf, HEX);
-  delay(500);
-  Serial.print(millis());
-  Serial.print(F(":loop:free:buf=0x"));
-  Serial.println((int) buf, HEX);
-  free(buf);
-  buf = NULL;
 }
 
 const int LED = 13;
@@ -117,7 +93,7 @@ void loop3()
     Serial.print(F(":loop3:alloc:buf=0x"));
     Serial.println((int) buf, HEX);
     if (buf == NULL) {
-      delay(10);
+      delay(1000);
       return;
     }
   }
