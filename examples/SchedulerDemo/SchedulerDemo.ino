@@ -32,18 +32,19 @@ void setup()
   Serial.begin(57600);
   Serial.println(F("SchedulerDemo: started"));
 
+  // Allocate and deallocate a buffer with a delay
   void* buf = malloc(64);
   Serial.print(millis());
   Serial.print(F(":setup:alloc:buf=0x"));
   Serial.println((int) buf, HEX);
   delay(100);
-
   Serial.print(millis());
   Serial.print(F(":setup:free:buf=0x"));
   Serial.println((int) buf, HEX);
   free(buf);
   buf = NULL;
 
+  // Initiate threads
   Scheduler.begin();
   setup2();
   Scheduler.start(loop2);
@@ -53,12 +54,16 @@ void setup()
 
 void loop()
 {
+  // Main loop iteraction count
   static int i = 0;
+
+  // Print main loop iterations
   Serial.print(millis());
   Serial.print(F(":loop::i="));
   Serial.println(i++);
   delay(500);
 
+  // Allocate and deallocate a buffer with a delay
   void* buf = malloc(64);
   Serial.print(millis());
   Serial.print(F(":loop:alloc:buf=0x"));
@@ -82,10 +87,13 @@ void setup2()
 
 void loop2()
 {
+  // Turn LED off
   Serial.print(millis());
   Serial.println(F(":loop2::led off"));
   digitalWrite(LED, LOW);
   delay(1000);
+
+  // Turn LED on
   Serial.print(millis());
   Serial.println(F(":loop2::led on"));
   digitalWrite(LED, HIGH);
@@ -101,6 +109,8 @@ void setup3()
 void loop3()
 {
   static char* buf = NULL;
+
+  // Check for buffer allocation
   if (buf == NULL) {
     buf = (char*) malloc(64);
     Serial.print(millis());
@@ -111,23 +121,35 @@ void loop3()
       return;
     }
   }
+
+  // Read line and yield while waiting for characters
+  // Capture wait time and number of yields
   char* bp = buf;
-  unsigned long nr = 0;
+  unsigned long yields = 0;
+  unsigned long start = millis();
   int c;
   while ((c = Serial.read()) != '\n') {
     if (c > 0)
       *bp++ = c;
     else {
-      nr += 1;
+      yields += 1;
       yield();
     }
   }
   *bp = 0;
+
+  // Print wait time, number of yields and line
+  unsigned long stop = millis();
+  unsigned long ms = stop - start;
   Serial.print(millis());
-  Serial.print(F(":loop3:nr="));
-  Serial.print(nr);
+  Serial.print(F(":loop3:yields="));
+  Serial.print(yields);
+  Serial.print(F(",ms="));
+  Serial.print(ms);
   Serial.print(F(",buf="));
   Serial.println(buf);
+
+  // Check for buffer free command
   if (!strcmp_P(buf, (const char*) F("free"))) {
     Serial.print(millis());
     Serial.print(F(":loop3:free:buf=0x"));
