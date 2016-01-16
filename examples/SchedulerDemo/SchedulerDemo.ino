@@ -36,7 +36,13 @@ void setup()
   Serial.print(millis());
   Serial.print(F(":setup:alloc:buf=0x"));
   Serial.println((int) buf, HEX);
+  delay(100);
+
+  Serial.print(millis());
+  Serial.print(F(":setup:free:buf=0x"));
+  Serial.println((int) buf, HEX);
   free(buf);
+  buf = NULL;
 
   Scheduler.begin();
   setup2();
