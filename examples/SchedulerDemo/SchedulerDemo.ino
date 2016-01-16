@@ -32,8 +32,12 @@ void setup()
   Serial.begin(57600);
   Serial.println(F("SchedulerDemo: started"));
 
+  void* buf = malloc(64);
   Serial.print(millis());
-  Serial.println(F(":setup"));
+  Serial.print(F(":setup:alloc:buf=0x"));
+  Serial.println((int) buf, HEX);
+  free(buf);
+
   Scheduler.begin();
   setup2();
   Scheduler.start(loop2);
@@ -48,6 +52,17 @@ void loop()
   Serial.print(F(":loop::i="));
   Serial.println(i++);
   delay(500);
+
+  void* buf = malloc(64);
+  Serial.print(millis());
+  Serial.print(F(":loop:alloc:buf=0x"));
+  Serial.println((int) buf, HEX);
+  delay(500);
+  Serial.print(millis());
+  Serial.print(F(":loop:free:buf=0x"));
+  Serial.println((int) buf, HEX);
+  free(buf);
+  buf = NULL;
 }
 
 const int LED = 13;
@@ -79,7 +94,17 @@ void setup3()
 
 void loop3()
 {
-  char buf[64];
+  static char* buf = NULL;
+  if (buf == NULL) {
+    buf = (char*) malloc(64);
+    Serial.print(millis());
+    Serial.print(F(":loop3:alloc:buf=0x"));
+    Serial.println((int) buf, HEX);
+    if (buf == NULL) {
+      delay(10);
+      return;
+    }
+  }
   char* bp = buf;
   unsigned long nr = 0;
   int c;
@@ -97,5 +122,13 @@ void loop3()
   Serial.print(nr);
   Serial.print(F(",buf="));
   Serial.println(buf);
+  if (!strcmp_P(buf, (const char*) F("free"))) {
+    Serial.print(millis());
+    Serial.print(F(":loop3:free:buf=0x"));
+    Serial.println((int) buf, HEX);
+    free(buf);
+    delay(500);
+    buf = NULL;
+  }
 }
 
