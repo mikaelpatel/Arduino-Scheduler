@@ -40,10 +40,14 @@ bool SchedulerClass::start(loopFunc loop, size_t stackSize)
 {
   char stack[s_top];
   extern int __heap_start, *__brkval;
+  extern char* __malloc_heap_end;
+  extern size_t __malloc_margin;
   int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
   int STACKSTART = ((int) stack) - stackSize;
+  HEAPEND += __malloc_margin;
   if (STACKSTART < HEAPEND) return (false);
   s_top += stackSize;
+  __malloc_heap_end = (char*) STACKSTART;
   init(stack, loop);
   return (true);
 }
