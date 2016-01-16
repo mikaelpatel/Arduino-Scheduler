@@ -17,12 +17,27 @@
  *
  * @section Description
  * Benchmark Scheduler library.
- *  1. Initiate scheduler and main thread: 4 us
- *  2. Yield main thread: 12 us
- *  3. Start a thread: 24 us
- *  4. Yield between threads: 25 us
- *  5. Delay 10 ms and check increments: 339, 29 us
- * Arduino 1.6.7, Mega 2560 (clone).
+ *
+ * @section Results Arduino 1.6.7, Mega 2560
+ * 1. Initiate scheduler and main thread: 4 us
+ * 2. Yield main thread: 12 us
+ * 3. Start a thread: 24 us
+ * 4. Yield between two threads: 26 us
+ * 5. Delay 10 ms and check increments: 338, 10028:29 us
+ * 6. Start 59 threads: 828:14 us
+ * 7. Yield and check increments: 60, 784:13 us
+ * 8. Delay 10 ms and check increments: 780, 10764:13 us
+ *
+ * @section Results Arduino 1.6.7, Pro-Mini
+ * SchedulerBenckmark: started
+ * 1. Initiate scheduler and main thread: 4 us
+ * 2. Yield main thread: 11 us
+ * 3. Start a thread: 24 us
+ * 4. Yield between two threads: 22 us
+ * 5. Delay 10 ms and check increments: 381, 10028:26 us
+ * 6. Start 11 threads: 148:13 us
+ * 7. Yield and check increments: 12, 148:12 us
+ * 8. Delay 10 ms and check increments: 768, 10064:13 us
  */
 
 #include <Scheduler.h>
@@ -32,13 +47,15 @@ int counter = 0;
 void setup()
 {
   unsigned long start, stop, us;
+  int nr;
 
   Serial.begin(57600);
   Serial.println(F("SchedulerBenckmark: started"));
   Serial.flush();
 
+  // 1. Measure initiate scheduler
   start = micros();
-  Scheduler.begin();
+  Scheduler.begin(128);
   stop = micros();
   us = stop - start;
   Serial.print(F("1. Initiate scheduler and main thread: "));
@@ -46,6 +63,7 @@ void setup()
   Serial.println(F(" us"));
   Serial.flush();
 
+  // 2. Measure yield with single thread
   start = micros();
   for (int i = 0; i < 10000; i++)
     yield();
@@ -55,6 +73,7 @@ void setup()
   Serial.print(us);
   Serial.println(F(" us"));
 
+  // 3. Measure start of thread
   start = micros();
   Scheduler.start(incrementCounter);
   stop = micros();
@@ -64,29 +83,82 @@ void setup()
   Serial.println(F(" us"));
   Serial.flush();
 
+  // 4. Measure yield between two threads
   start = micros();
   for (int i = 0; i < 10000; i++)
     yield();
   stop = micros();
   us = (stop - start) / 10000;
   if (counter != 10000) Serial.println(F("Error: counter"));
-  Serial.print(F("4. Yield between threads: "));
+  Serial.print(F("4. Yield between two threads: "));
   Serial.print(us);
   Serial.println(F(" us"));
   Serial.flush();
 
+  // 5. Measure counter update during 10 ms delay
   counter = 0;
+  start = micros();
   delay(10);
+  stop = micros();
+  us = stop - start;
   Serial.print(F("5. Delay 10 ms and check increments: "));
   Serial.print(counter);
   Serial.print(F(", "));
-  Serial.print(10000 / counter);
+  Serial.print(us);
+  Serial.print(F(":"));
+  Serial.print(us / counter);
+  Serial.println(F(" us"));
+  Serial.flush();
+
+  // 6. Measure max number of threads
+  start = micros();
+  nr = 0;
+  while (Scheduler.start(incrementCounter)) nr++;
+  stop = micros();
+  us = stop - start;
+  Serial.print(F("6. Start "));
+  Serial.print(nr);
+  Serial.print(F(" threads: "));
+  Serial.print(us);
+  Serial.print(F(":"));
+  Serial.print(us / nr);
+  Serial.println(F(" us"));
+  Serial.flush();
+
+  // 7. Measure one yield cycle with max threads
+  counter = 0;
+  start = micros();
+  yield();
+  stop = micros();
+  us = stop - start;
+  Serial.print(F("7. Yield and check increments: "));
+  Serial.print(counter);
+  Serial.print(F(", "));
+  Serial.print(us);
+  Serial.print(F(":"));
+  Serial.print(us / counter);
+  Serial.println(F(" us"));
+  Serial.flush();
+
+  // 8. Measure counter update during 10 ms delay with max threads
+  counter = 0;
+  start = micros();
+  delay(10);
+  stop = micros();
+  us = stop - start;
+  Serial.print(F("8. Delay 10 ms and check increments: "));
+  Serial.print(counter);
+  Serial.print(F(", "));
+  Serial.print(us);
+  Serial.print(F(":"));
+  Serial.print(us / counter);
   Serial.println(F(" us"));
   Serial.flush();
 }
 
 void loop()
 {
+  yield();
 }
 
 void incrementCounter()
