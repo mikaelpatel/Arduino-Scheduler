@@ -34,9 +34,11 @@ public:
 
   /**
    * Initiate the scheduler and main thread with given stack size.
+   * Returns true if successful otherwise false.
    * @param[in] stackSize size in bytes.
+   * @return bool
    */
-  static void begin(size_t stackSize = DEFAULT_STACK_SIZE);
+  static bool begin(size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
    * Start the given loop function as a thread with given stack size.

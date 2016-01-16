@@ -31,9 +31,10 @@ SchedulerClass::thread_t* SchedulerClass::s_running = &SchedulerClass::s_main;
 
 size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 
-void SchedulerClass::begin(size_t stackSize)
+bool SchedulerClass::begin(size_t stackSize)
 {
   s_top = stackSize;
+  return (true);
 }
 
 bool SchedulerClass::start(loopFunc loop, size_t stackSize)
