@@ -40,10 +40,12 @@ public:
 
   /**
    * Start the given loop function as a thread with given stack size.
+   * Returns true if successful otherwise false.
    * @param[in] loop thread function.
    * @param[in] stackSize size in bytes.
+   * @return bool
    */
-  static void start(loopFunc loop, size_t stackSize = DEFAULT_STACK_SIZE);
+  static bool start(loopFunc loop, size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
    * Context switch to next thread.

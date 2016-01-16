@@ -17,7 +17,6 @@
  */
 
 #include "Scheduler.h"
-#include <alloca.h>
 
 #define UNUSED(x) (void) (x)
 
@@ -37,11 +36,16 @@ void SchedulerClass::begin(size_t stackSize)
   s_top = stackSize;
 }
 
-void SchedulerClass::start(loopFunc loop, size_t stackSize)
+bool SchedulerClass::start(loopFunc loop, size_t stackSize)
 {
-  void* stack = alloca(s_top);
+  char stack[s_top];
+  extern int __heap_start, *__brkval;
+  int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+  int STACKSTART = ((int) stack) - stackSize;
+  if (STACKSTART < HEAPEND) return (false);
   s_top += stackSize;
   init(stack, loop);
+  return (true);
 }
 
 void SchedulerClass::yield()
