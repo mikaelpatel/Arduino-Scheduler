@@ -1,5 +1,5 @@
 /**
- * @file SchedulerBenckmark.ino
+ * @file SchedulerBenchmark.ino
  * @version 1.0
  *
  * @section License
@@ -19,7 +19,7 @@
  * Benchmark Scheduler library.
  *
  * @section Results Arduino 1.6.7, Mega 2560
- * SchedulerBenckmark: started
+ * SchedulerBenchmark: started
  * 1. Initiate scheduler and main thread: 4 us
  * 2. Yield main thread: 12 us
  * 3. Start a thread: 16 us
@@ -30,7 +30,7 @@
  * 8. Delay 10 ms and check increments: 767, 10592:13 us
  *
  * @section Results Arduino 1.6.7, Pro-Mini
- * SchedulerBenckmark: started
+ * SchedulerBenchmark: started
  * 1. Initiate scheduler and main thread: 4 us
  * 2. Yield main thread: 11 us
  * 3. Start a thread: 16 us
@@ -51,7 +51,7 @@ void setup()
   int nr;
 
   Serial.begin(57600);
-  Serial.println(F("SchedulerBenckmark: started"));
+  Serial.println(F("SchedulerBenchmark: started"));
   Serial.flush();
 
   // 1. Measure initiate scheduler
