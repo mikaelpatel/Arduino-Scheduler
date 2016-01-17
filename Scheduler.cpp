@@ -46,9 +46,11 @@ bool SchedulerClass::begin(size_t stackSize)
 
 bool SchedulerClass::start(func_t setup, func_t loop, size_t stackSize)
 {
-  char stack[s_top];
+  // Check called from main task
+  if (s_running != &s_main) return (false);
 
   // Check that task can be allocated
+  char stack[s_top];
   int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
   int STACKSTART = ((int) stack) - stackSize;
   HEAPEND += __malloc_margin;
