@@ -20,53 +20,74 @@
 
 #define UNUSED(x) (void) (x)
 
+extern int __heap_start, *__brkval;
+extern char* __malloc_heap_end;
+extern size_t __malloc_margin;
+
 SchedulerClass Scheduler;
 
-SchedulerClass::thread_t SchedulerClass::s_main = {
+SchedulerClass::task_t SchedulerClass::s_main = {
   &SchedulerClass::s_main,
   { 0 }
 };
 
-SchedulerClass::thread_t* SchedulerClass::s_running = &SchedulerClass::s_main;
+SchedulerClass::task_t* SchedulerClass::s_running = &SchedulerClass::s_main;
+
+SchedulerClass::task_t* SchedulerClass::s_last = &SchedulerClass::s_main;
 
 size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 
 bool SchedulerClass::begin(size_t stackSize)
 {
+  // Main task stack size. Should be checked
   s_top = stackSize;
   return (true);
 }
 
-bool SchedulerClass::start(loopFunc loop, size_t stackSize)
+bool SchedulerClass::start(func_t setup, func_t loop, size_t stackSize)
 {
   char stack[s_top];
-  extern int __heap_start, *__brkval;
-  extern char* __malloc_heap_end;
-  extern size_t __malloc_margin;
+
+  // Check that task can be allocated
   int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
   int STACKSTART = ((int) stack) - stackSize;
   HEAPEND += __malloc_margin;
   if (STACKSTART < HEAPEND) return (false);
+
+  // Adjust stack top from next task allocation
   s_top += stackSize;
   __malloc_heap_end = (char*) STACKSTART;
-  init(stack, loop);
+
+  // Initiate task with given functions and stack
+  init(setup, loop, stack);
   return (true);
 }
 
 void SchedulerClass::yield()
 {
+  // Caller will continue here on yield
   if (setjmp(s_running->context)) return;
+
+  // Next task in run queue will continue
   s_running = s_running->next;
-  longjmp(s_running->context, 1);
+  longjmp(s_running->context, true);
 }
 
-void SchedulerClass::init(void* stack, loopFunc loop)
+void SchedulerClass::init(func_t setup, func_t loop, void* stack)
 {
   UNUSED(stack);
-  thread_t thread;
-  thread.next = s_main.next;
-  s_main.next = &thread;
-  if (setjmp(thread.context)) while (1) loop();
+  task_t task;
+
+  // Add task last in run queue
+  task.next = s_last->next;
+  s_last->next = &task;
+  s_last = &task;
+
+  // Create context for new task, caller will return
+  if (setjmp(task.context)) {
+    if (setup != NULL) setup();
+    while (1) loop();
+  }
 }
 
 extern "C"

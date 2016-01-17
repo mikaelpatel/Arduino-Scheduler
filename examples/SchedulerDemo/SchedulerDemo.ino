@@ -17,11 +17,11 @@
  *
  * @section Description
  * This Arduino sketch shows how to use the Scheduler library.
- * Two threads are scheduled together with the main thread.
- * 1. The main thread prints an iteration number and delays.
- * 2. The second thread blinks the built-in LED and prints the
+ * Two tasks are scheduled together with the main task.
+ * 1. The main task prints an iteration number and delays.
+ * 2. The second task blinks the built-in LED and prints the
  *    current status.
- * 3. The third thread reads a line from Serial input. The line is
+ * 3. The third task reads a line from Serial input. The line is
  *    printed with number of yields during the input wait.
  */
 
@@ -32,12 +32,11 @@ void setup()
   Serial.begin(57600);
   Serial.println(F("SchedulerDemo: started"));
 
-  // Initiate threads
-  Scheduler.begin();
-  setup2();
-  Scheduler.start(loop2);
-  setup3();
-  Scheduler.start(loop3);
+  Serial.print(millis());
+  Serial.println(F(":setup"));
+
+  Scheduler.start(setup2, loop2);
+  Scheduler.start(setup3, loop3);
 }
 
 void loop()

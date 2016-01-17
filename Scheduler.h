@@ -28,64 +28,74 @@ public:
   static const size_t DEFAULT_STACK_SIZE = 128;
 
   /**
-   * Loop function prototype.
+   * Function prototype (setup and loop).
    */
-  typedef void (*loopFunc)();
+  typedef void (*func_t)();
 
   /**
-   * Initiate the scheduler and main thread with given stack size.
+   * Initiate the scheduler and main task with given stack size.
+   * Should be called before start of any tasks if the main task
+   * requires a stack size other than the default size.
    * Returns true if successful otherwise false.
-   * @param[in] stackSize size in bytes.
+   * @param[in] stackSize in bytes.
    * @return bool
    */
   static bool begin(size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
-   * Start the given loop function as a thread with given stack size.
-   * Returns true if successful otherwise false.
-   * @param[in] loop thread function.
-   * @param[in] stackSize size in bytes.
+   * Start a task with given functions and stack size. Should be
+   * called from main task (in setup). Returns true if successful
+   * otherwise false.
+   * @param[in] setup task function.
+   * @param[in] loop task function.
+   * @param[in] stackSize in bytes.
    * @return bool
    */
-  static bool start(loopFunc loop, size_t stackSize = DEFAULT_STACK_SIZE);
+  static bool start(func_t setup, func_t loop, size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
-   * Context switch to next thread.
+   * Context switch to next task in run queue.
    */
   static void yield();
 
 protected:
   /**
-   * Initiate the given loop function as a thread with the given stack.
+   * Initiate a task with the given functions and stack. When control
+   * is yield to the task the setup function is first run and then the
+   * loop function is repeated.
+   * @param[in] setup task function.
+   * @param[in] loop task function.
    * @param[in] stack top reference.
-   * @param[in] loop thread function.
    */
-  static void init(void* stack, loopFunc loop);
+  static void init(func_t setup, func_t loop, void* stack);
 
   /**
-   * Thread run-time structure.
+   * Task run-time structure.
    */
-  struct thread_t {
-    thread_t* next;		//!< Next thread.
-    jmp_buf context;		//!< Thread context.
+  struct task_t {
+    task_t* next;		//!< Next task.
+    jmp_buf context;		//!< Task context.
   };
 
-  /** Main thread. */
-  static thread_t s_main;
+  /** Main task. */
+  static task_t s_main;
 
-  /** Running thread. */
-  static thread_t* s_running;
+  /** Running task. */
+  static task_t* s_running;
 
-  /** Thread stack allocation top. */
+  /** Last allocated task. */
+  static task_t* s_last;
+
+  /** Task stack allocation top. */
   static size_t s_top;
 };
 
 extern SchedulerClass Scheduler;
 
 /**
- * Syntactic sugar for scheduler based busy-wait for condition.
- * Yield until condition is valid. May require volatile condition
- * variables.
+ * Syntactic sugar for scheduler based busy-wait for condition;
+ * yield until condition is valid. May require volatile condition
+ * variable(s).
  * @param[in] cond condition to await.
  */
 #define await(cond) while (!(cond)) yield()

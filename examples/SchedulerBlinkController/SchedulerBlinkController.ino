@@ -36,9 +36,8 @@ void setup()
   Serial.println(F(":LED off"));
   Serial.flush();
 
-  Scheduler.begin();
-  Scheduler.start(controllerLoop);
-  Scheduler.start(buttonLoop);
+  Scheduler.start(NULL, controllerLoop);
+  Scheduler.start(NULL, buttonLoop);
 }
 
 void loop()

@@ -28,8 +28,7 @@ void setup()
 {
   Serial.begin(57600);
   Serial.println(F("SchedulerDebounce: started"));
-  Scheduler.begin();
-  Scheduler.start(debounceLoop);
+  Scheduler.start(debounceSetup, debounceLoop);
 }
 
 void loop()
@@ -40,12 +39,19 @@ void loop()
   delay(1000);
 }
 
+const int BUTTON = 4;
+volatile int state;
+
+void debounceSetup()
+{
+  pinMode(BUTTON, INPUT_PULLUP);
+  state = digitalRead(BUTTON);
+}
+
 void debounceLoop()
 {
   const unsigned int DEBOUNCE = 50;
-  const int BUTTON = 4;
-  pinMode(BUTTON, INPUT_PULLUP);
-  int state = digitalRead(BUTTON);
+  state = digitalRead(BUTTON);
   while (1) {
     await(digitalRead(BUTTON) != state);
     state = !state;

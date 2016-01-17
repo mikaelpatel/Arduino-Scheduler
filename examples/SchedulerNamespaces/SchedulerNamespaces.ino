@@ -121,12 +121,10 @@ void setup()
   Serial.begin(57600);
   Serial.println(F("SchedulerNamespaces: started"));
 
-  // Initiate threads
+  // Initiate tasks
   Scheduler.begin();
-  BlinkTask::setup();
-  Scheduler.start(BlinkTask::loop);
-  ShellTask::setup();
-  Scheduler.start(ShellTask::loop);
+  Scheduler.start(BlinkTask::setup, BlinkTask::loop);
+  Scheduler.start(ShellTask::setup, ShellTask::loop);
 }
 
 void loop()

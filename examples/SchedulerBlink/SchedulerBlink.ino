@@ -17,42 +17,11 @@
  *
  * @section Description
  * This Arduino sketch uses the Scheduler library to blink three
- * LEDs with different speed.
+ * LEDs with different speed. Each LED is controlled by a separate
+ * task.
  */
 
 #include <Scheduler.h>
-
-const int led1 = 13;
-const int led2 = 12;
-const int led3 = 11;
-
-void setup()
-{
-  // Initiate pins
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
-  pinMode(led3, OUTPUT);
-
-  // Initiate scheduler and threads
-  Scheduler.begin();
-  Scheduler.start(loop2);
-  Scheduler.start(loop3);
-}
-
-void loop()
-{
-  blink(led1, 500);
-}
-
-void loop2()
-{
-  blink(led2, 250);
-}
-
-void loop3()
-{
-  blink(led3, 1000);
-}
 
 void blink(int pin, unsigned int ms)
 {
@@ -60,5 +29,53 @@ void blink(int pin, unsigned int ms)
   delay(ms);
   digitalWrite(pin, LOW);
   delay(ms);
+}
+
+void setup()
+{
+  Scheduler.start(setup1, loop1);
+  Scheduler.start(setup2, loop2);
+  Scheduler.start(setup3, loop3);
+}
+
+void loop()
+{
+  yield();
+}
+
+const int led1 = 11;
+
+void setup1()
+{
+  pinMode(led1, OUTPUT);
+}
+
+void loop1()
+{
+  blink(led1, 500);
+}
+
+const int led2 = 12;
+
+void setup2()
+{
+  pinMode(led2, OUTPUT);
+}
+
+void loop2()
+{
+  blink(led2, 250);
+}
+
+const int led3 = 13;
+
+void setup3()
+{
+  pinMode(led3, OUTPUT);
+}
+
+void loop3()
+{
+  blink(led3, 1000);
 }
 
