@@ -39,15 +39,15 @@ size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 
 bool SchedulerClass::begin(size_t stackSize)
 {
-  // Main task stack size. Should be checked
+  // Main task stack size. Should be checked allocation
   s_top = stackSize;
   return (true);
 }
 
-bool SchedulerClass::start(func_t setup, func_t loop, size_t stackSize)
+bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
 {
-  // Check called from main task
-  if (s_running != &s_main) return (false);
+  // Check called from main task and valid task loop function
+  if (s_running != &s_main || taskLoop == NULL) return (false);
 
   // Check that task can be allocated
   char stack[s_top];
@@ -61,7 +61,7 @@ bool SchedulerClass::start(func_t setup, func_t loop, size_t stackSize)
   __malloc_heap_end = (char*) STACKSTART;
 
   // Initiate task with given functions and stack
-  init(setup, loop, stack);
+  init(taskSetup, taskLoop, stack);
   return (true);
 }
 

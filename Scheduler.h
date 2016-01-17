@@ -46,12 +46,14 @@ public:
    * Start a task with given functions and stack size. Should be
    * called from main task (in setup). Returns true if successful
    * otherwise false.
-   * @param[in] setup task function.
-   * @param[in] loop task function.
+   * @param[in] taskSetup function (may be NULL).
+   * @param[in] taskLoop function (may not be NULL).
    * @param[in] stackSize in bytes.
    * @return bool
    */
-  static bool start(func_t setup, func_t loop, size_t stackSize = DEFAULT_STACK_SIZE);
+  static bool start(func_t taskSetup,
+		    func_t taskLoop,
+		    size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
    * Context switch to next task in run queue.
@@ -63,8 +65,8 @@ protected:
    * Initiate a task with the given functions and stack. When control
    * is yield to the task the setup function is first run and then the
    * loop function is repeated.
-   * @param[in] setup task function.
-   * @param[in] loop task function.
+   * @param[in] setup task function (may be NULL).
+   * @param[in] loop task function (may not be NULL).
    * @param[in] stack top reference.
    */
   static void init(func_t setup, func_t loop, void* stack);
