@@ -23,6 +23,21 @@
 
 #include <Scheduler.h>
 
+#define TRACE(msg)					\
+  do {							\
+    Serial.print(millis());				\
+    Serial.print(':');					\
+    Serial.print(__PRETTY_FUNCTION__);			\
+    Serial.print(':');					\
+    Serial.print(F(msg));				\
+  } while (0)
+
+#define TRACELN(msg)					\
+  do {							\
+    TRACE(msg);						\
+    Serial.println();					\
+  } while (0)
+
 namespace BlinkTask {
 
   const unsigned int PERIOD = 1000;
@@ -30,22 +45,17 @@ namespace BlinkTask {
 
   void setup()
   {
-    Serial.print(millis());
-    Serial.println(F(":BlinkTask::setup"));
+    TRACELN("led off");
     pinMode(LED, OUTPUT);
   }
 
   void loop()
   {
-    // Turn LED off
-    Serial.print(millis());
-    Serial.println(F(":BlinkTask::loop:led off"));
+    TRACELN("led off");
     digitalWrite(LED, LOW);
     delay(PERIOD);
 
-    // Turn LED on
-    Serial.print(millis());
-    Serial.println(F(":BlinkTask::loop:led on"));
+    TRACELN("led on");
     digitalWrite(LED, HIGH);
     delay(PERIOD);
   }
@@ -58,8 +68,7 @@ namespace ShellTask {
 
   void setup()
   {
-    Serial.print(millis());
-    Serial.println(F(":ShellTask::setup"));
+    TRACELN("");
   }
 
   void loop()
@@ -67,8 +76,7 @@ namespace ShellTask {
     // Check for buffer allocation
     if (buf == NULL) {
       buf = (char*) malloc(BUF_MAX);
-      Serial.print(millis());
-      Serial.print(F(":ShellTask::loop:alloc:buf=0x"));
+      TRACE("malloc:buf=0x");
       Serial.println((int) buf, HEX);
       if (buf == NULL) {
 	delay(1000);
@@ -95,8 +103,7 @@ namespace ShellTask {
     // Print wait time, number of yields and line
     unsigned long stop = millis();
     unsigned long ms = stop - start;
-    Serial.print(millis());
-    Serial.print(F(":ShellTask::loop:yields="));
+    TRACE("yields=");
     Serial.print(yields);
     Serial.print(F(",ms="));
     Serial.print(ms);
@@ -105,8 +112,7 @@ namespace ShellTask {
 
     // Check for buffer free command
     if (!strcmp_P(buf, (const char*) F("free"))) {
-      Serial.print(millis());
-      Serial.print(F(":ShellTask::loop:free:buf=0x"));
+      TRACE("free:buf=0x");
       Serial.println((int) buf, HEX);
       free(buf);
       delay(500);
@@ -122,19 +128,17 @@ void setup()
   Serial.println(F("SchedulerNamespaces: started"));
 
   // Initiate tasks
-  Scheduler.begin();
   Scheduler.start(BlinkTask::setup, BlinkTask::loop);
   Scheduler.start(ShellTask::setup, ShellTask::loop);
 }
 
 void loop()
 {
-  // Main loop iteraction count
+  // Main loop iteration count
   static int i = 0;
 
   // Print main loop iterations
-  Serial.print(millis());
-  Serial.print(F(":loop::i="));
+  TRACE("i=");
   Serial.println(i++);
   delay(500);
 }
