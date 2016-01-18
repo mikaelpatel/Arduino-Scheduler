@@ -45,7 +45,7 @@ namespace BlinkTask {
 
   void setup()
   {
-    TRACELN("led off");
+    TRACELN("led output");
     pinMode(LED, OUTPUT);
   }
 
