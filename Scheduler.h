@@ -28,15 +28,15 @@ public:
   static const size_t DEFAULT_STACK_SIZE = 128;
 
   /**
-   * Function prototype (setup and loop).
+   * Function prototype (task setup and loop functions).
    */
   typedef void (*func_t)();
 
   /**
    * Initiate the scheduler and main task with given stack size.
    * Should be called before start of any tasks if the main task
-   * requires a stack size other than the default size.
-   * Returns true if successful otherwise false.
+   * requires a stack size other than the default size. Returns true
+   * if successful otherwise false.
    * @param[in] stackSize in bytes.
    * @return bool
    */
@@ -44,8 +44,10 @@ public:
 
   /**
    * Start a task with given functions and stack size. Should be
-   * called from main task (in setup). Returns true if successful
-   * otherwise false.
+   * called from main task (in setup). The functions are executed by
+   * the task. The taskSetup function (if provided) is run once.
+   * The taskLoop function is repeatedly called. The taskSetup may be
+   * omitted (NULL). Returns true if successful otherwise false.
    * @param[in] taskSetup function (may be NULL).
    * @param[in] taskLoop function (may not be NULL).
    * @param[in] stackSize in bytes.

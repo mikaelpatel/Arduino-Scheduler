@@ -47,7 +47,7 @@ bool SchedulerClass::begin(size_t stackSize)
 bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
 {
   // Check called from main task and valid task loop function
-  if (s_running != &s_main || taskLoop == NULL) return (false);
+  if ((s_running != &s_main) || (taskLoop == NULL)) return (false);
 
   // Check that task can be allocated
   char stack[s_top];
