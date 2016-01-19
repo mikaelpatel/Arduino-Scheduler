@@ -25,9 +25,9 @@
  * 3. Start a task: 20 us
  * 4. Yield between two tasks: 26 us
  * 5. Delay 10 ms and check increments: 338, 10024:29 us
- * 6. Start 58 tasks: 980:16 us
- * 7. Yield and check increments: 59, 800:13 us
- * 8. Delay 10 ms and check increments: 767, 10592:13 us
+ * 6. Start 47 tasks: 816:17 us
+ * 7. Yield and check increments: 48, 652:13 us
+ * 8. Delay 10 ms and check increments: 768, 10652:13 us
  *
  * @section Results Arduino 1.6.7, Pro-Mini
  * SchedulerBenchmark: started
@@ -35,10 +35,10 @@
  * 2. Yield main task: 11 us
  * 3. Start a task: 20 us
  * 4. Yield between two tasks: 22 us
- * 5. Delay 10 ms and check increments: 381, 10032:26 us
- * 6. Start 10 tasks: 164:16 us
- * 7. Yield and check increments: 11, 144:13 us
- * 8. Delay 10 ms and check increments: 759, 10028:13 us
+ * 5. Delay 10 ms and check increments: 381, 10028:26 us
+ * 6. Start 8 tasks: 136:17 us
+ * 7. Yield and check increments: 9, 120:13 us
+ * 8. Delay 10 ms and check increments: 747, 10088:13 us
  */
 
 #include <Scheduler.h>

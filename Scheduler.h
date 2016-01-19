@@ -62,6 +62,12 @@ public:
    */
   static void yield();
 
+  /**
+   * Return current task stack size.
+   * @return bytes
+   */
+  static size_t stack();
+
 protected:
   /**
    * Initiate a task with the given functions and stack. When control
@@ -80,6 +86,7 @@ protected:
     task_t* next;		//!< Next task.
     task_t* prev;		//!< Previous task.
     jmp_buf context;		//!< Task context.
+    unsigned char* stack;	//!< Task stack.
   };
 
   /** Main task. */

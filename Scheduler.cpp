@@ -29,17 +29,18 @@ SchedulerClass Scheduler;
 SchedulerClass::task_t SchedulerClass::s_main = {
   &SchedulerClass::s_main,
   &SchedulerClass::s_main,
-  { 0 }
+  { 0 },
+  0
 };
 
 SchedulerClass::task_t* SchedulerClass::s_running = &SchedulerClass::s_main;
 
-size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
+size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE + sizeof(task_t);
 
 bool SchedulerClass::begin(size_t stackSize)
 {
   // Main task stack size. Should be checked allocation
-  s_top = stackSize;
+  s_top = stackSize + sizeof(task_t);
   return (true);
 }
 
@@ -48,6 +49,9 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   // Check called from main task and valid task loop function
   if ((s_running != &s_main) || (taskLoop == NULL)) return (false);
 
+  // Adjust stack size with size of task context
+  stackSize += sizeof(task_t);
+
   // Check that task can be allocated
   char stack[s_top];
   int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
@@ -55,12 +59,14 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   HEAPEND += __malloc_margin;
   if (STACKSTART < HEAPEND) return (false);
 
-  // Adjust stack top from next task allocation
+  // Adjust stack top for next task allocation
   s_top += stackSize;
+
+  // Adjust max heap limit
   __malloc_heap_end = (char*) STACKSTART;
 
   // Initiate task with given functions and stack
-  init(taskSetup, taskLoop, stack);
+  init(taskSetup, taskLoop, stack - stackSize);
   return (true);
 }
 
@@ -74,6 +80,12 @@ void SchedulerClass::yield()
   longjmp(s_running->context, true);
 }
 
+size_t SchedulerClass::stack()
+{
+  unsigned char marker;
+  return (&marker - s_running->stack);
+}
+
 void SchedulerClass::init(func_t setup, func_t loop, void* stack)
 {
   UNUSED(stack);
@@ -84,6 +96,7 @@ void SchedulerClass::init(func_t setup, func_t loop, void* stack)
   task.prev = s_main.prev;
   task.prev->next = &task;
   task.next->prev = &task;
+  task.stack = (unsigned char*) stack;
 
   // Create context for new task, caller will return
   if (setjmp(task.context)) {
