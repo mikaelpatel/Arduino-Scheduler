@@ -81,7 +81,7 @@ void SchedulerClass::init(func_t setup, func_t loop, void* stack)
   task_t task;
 
   // Add task last in run queue
-  task.next = s_last->next;
+  task.next = &s_main;
   s_last->next = &task;
   s_last = &task;
 
