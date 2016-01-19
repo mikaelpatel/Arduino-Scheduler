@@ -78,6 +78,7 @@ protected:
    */
   struct task_t {
     task_t* next;		//!< Next task.
+    task_t* prev;		//!< Previous task.
     jmp_buf context;		//!< Task context.
   };
 
@@ -86,9 +87,6 @@ protected:
 
   /** Running task. */
   static task_t* s_running;
-
-  /** Last allocated task. */
-  static task_t* s_last;
 
   /** Task stack allocation top. */
   static size_t s_top;

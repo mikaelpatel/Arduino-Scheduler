@@ -28,12 +28,11 @@ SchedulerClass Scheduler;
 
 SchedulerClass::task_t SchedulerClass::s_main = {
   &SchedulerClass::s_main,
+  &SchedulerClass::s_main,
   { 0 }
 };
 
 SchedulerClass::task_t* SchedulerClass::s_running = &SchedulerClass::s_main;
-
-SchedulerClass::task_t* SchedulerClass::s_last = &SchedulerClass::s_main;
 
 size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 
@@ -82,8 +81,9 @@ void SchedulerClass::init(func_t setup, func_t loop, void* stack)
 
   // Add task last in run queue
   task.next = &s_main;
-  s_last->next = &task;
-  s_last = &task;
+  task.prev = s_main.prev;
+  task.prev->next = &task;
+  task.next->prev = &task;
 
   // Create context for new task, caller will return
   if (setjmp(task.context)) {
