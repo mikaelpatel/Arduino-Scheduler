@@ -1,5 +1,5 @@
 /**
- * @file SchedulerDemoNamespaces.ino
+ * @file BlinkTask.h
  * @version 1.0
  *
  * @section License
@@ -16,35 +16,36 @@
  * Lesser General Public License for more details.
  *
  * @section Description
- * This Arduino sketch shows how to use the Scheduler library.
- * Rewrite of the SchedulerDemo sketch using namespaces for
- * each task.
+ * BlinkTask demo as namespace.
  */
 
+#ifndef BLINK_TASK_H
+#define BLINK_TASK_H
+
 #include <Scheduler.h>
-
 #include "Trace.h"
-#include "BlinkTask.h"
-#include "ShellTask.h"
 
-void setup()
-{
-  Serial.begin(57600);
-  Serial.println(F("SchedulerDemoNamespaces: started"));
+namespace BlinkTask {
 
-  // Initiate tasks
-  Scheduler.start(BlinkTask::setup, BlinkTask::loop);
-  Scheduler.start(ShellTask::setup, ShellTask::loop);
-}
+  const unsigned int PERIOD = 1000;
+  const int LED = 13;
 
-void loop()
-{
-  // Main loop iteration count
-  static int i = 0;
+  void setup()
+  {
+    TRACELN("led output");
+    pinMode(LED, OUTPUT);
+  }
 
-  // Print main loop iterations
-  TRACE("i=");
-  Serial.println(i++);
-  delay(500);
-}
+  void loop()
+  {
+    TRACELN("led off");
+    digitalWrite(LED, LOW);
+    delay(PERIOD);
 
+    TRACELN("led on");
+    digitalWrite(LED, HIGH);
+    delay(PERIOD);
+  }
+};
+
+#endif
