@@ -21,24 +21,24 @@
  * @section Results Arduino 1.6.7, Mega 2560
  * SchedulerBenchmark: started
  * 1. Initiate scheduler and main task: 4 us
- * 2. Yield main task: 12 us
+ * 2. Yield main task: 12.64 us
  * 3. Start a task: 20 us
- * 4. Yield between two tasks: 26 us
- * 5. Delay 10 ms and check increments: 338, 10024:29 us
- * 6. Start 47 tasks: 816:17 us
- * 7. Yield and check increments: 48, 652:13 us
- * 8. Delay 10 ms and check increments: 768, 10652:13 us
+ * 4. Yield between two tasks: 26.16 us
+ * 5. Delay 10 ms and check increments: 10028:338, 29.67 us
+ * 6. Start 47 tasks: 840:47, 17.87 us
+ * 7. Yield and check increments: 660:48, 13.75 us
+ * 8. Delay 10 ms and check increments: 10656:768, 13.88 us
  *
  * @section Results Arduino 1.6.7, Pro-Mini
  * SchedulerBenchmark: started
  * 1. Initiate scheduler and main task: 4 us
- * 2. Yield main task: 11 us
- * 3. Start a task: 20 us
- * 4. Yield between two tasks: 22 us
- * 5. Delay 10 ms and check increments: 381, 10028:26 us
- * 6. Start 8 tasks: 136:17 us
- * 7. Yield and check increments: 9, 120:13 us
- * 8. Delay 10 ms and check increments: 747, 10088:13 us
+ * 2. Yield main task: 11.00 us
+ * 3. Start a task: 16 us
+ * 4. Yield between two tasks: 22.89 us
+ * 5. Delay 10 ms and check increments: 10028:381, 26.32 us
+ * 6. Start 8 tasks: 144:8, 18.00 us
+ * 7. Yield and check increments: 120:9, 13.33 us
+ * 8. Delay 10 ms and check increments: 10088:747, 13.50 us
  */
 
 #include <Scheduler.h>
@@ -69,9 +69,9 @@ void setup()
   for (int i = 0; i < 10000; i++)
     yield();
   stop = micros();
-  us = (stop - start) / 10000;
+  us = stop - start;
   Serial.print(F("2. Yield main task: "));
-  Serial.print(us);
+  Serial.print(us / 10000.0);
   Serial.println(F(" us"));
   Serial.flush();
 
@@ -90,10 +90,10 @@ void setup()
   for (int i = 0; i < 10000; i++)
     yield();
   stop = micros();
-  us = (stop - start) / 10000;
+  us = stop - start;
   if (counter != 10000) Serial.println(F("Error: counter"));
   Serial.print(F("4. Yield between two tasks: "));
-  Serial.print(us);
+  Serial.print(us / 10000.0);
   Serial.println(F(" us"));
   Serial.flush();
 
@@ -104,11 +104,11 @@ void setup()
   stop = micros();
   us = stop - start;
   Serial.print(F("5. Delay 10 ms and check increments: "));
-  Serial.print(counter);
-  Serial.print(F(", "));
   Serial.print(us);
   Serial.print(F(":"));
-  Serial.print(us / counter);
+  Serial.print(counter);
+  Serial.print(F(", "));
+  Serial.print(us / (float) counter);
   Serial.println(F(" us"));
   Serial.flush();
 
@@ -123,7 +123,9 @@ void setup()
   Serial.print(F(" tasks: "));
   Serial.print(us);
   Serial.print(F(":"));
-  Serial.print(us / nr);
+  Serial.print(nr);
+  Serial.print(F(", "));
+  Serial.print(us / (float) nr);
   Serial.println(F(" us"));
   Serial.flush();
 
@@ -134,11 +136,11 @@ void setup()
   stop = micros();
   us = stop - start;
   Serial.print(F("7. Yield and check increments: "));
-  Serial.print(counter);
-  Serial.print(F(", "));
   Serial.print(us);
   Serial.print(F(":"));
-  Serial.print(us / counter);
+  Serial.print(counter);
+  Serial.print(F(", "));
+  Serial.print(us / (float) counter);
   Serial.println(F(" us"));
   Serial.flush();
 
@@ -149,11 +151,11 @@ void setup()
   stop = micros();
   us = stop - start;
   Serial.print(F("8. Delay 10 ms and check increments: "));
-  Serial.print(counter);
-  Serial.print(F(", "));
   Serial.print(us);
   Serial.print(F(":"));
-  Serial.print(us / counter);
+  Serial.print(counter);
+  Serial.print(F(", "));
+  Serial.print(us / (float) counter);
   Serial.println(F(" us"));
   Serial.flush();
 }
