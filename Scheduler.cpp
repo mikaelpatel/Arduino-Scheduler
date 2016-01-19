@@ -17,6 +17,7 @@
  */
 
 #include "Scheduler.h"
+#include "Arduino.h"
 
 #define UNUSED(x) (void) (x)
 
@@ -30,17 +31,17 @@ SchedulerClass::task_t SchedulerClass::s_main = {
   &SchedulerClass::s_main,
   &SchedulerClass::s_main,
   { 0 },
-  0
+  NULL
 };
 
 SchedulerClass::task_t* SchedulerClass::s_running = &SchedulerClass::s_main;
 
-size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE + sizeof(task_t);
+size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 
 bool SchedulerClass::begin(size_t stackSize)
 {
-  // Main task stack size. Should be checked allocation
-  s_top = stackSize + sizeof(task_t);
+  // Set main task stack size
+  s_top = stackSize;
   return (true);
 }
 
@@ -53,7 +54,8 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   stackSize += sizeof(task_t);
 
   // Check that task can be allocated
-  char stack[s_top];
+  unsigned char stack[s_top];
+  if (s_main.stack == NULL) s_main.stack = stack;
   int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
   int STACKSTART = ((int) stack) - stackSize;
   HEAPEND += __malloc_margin;
