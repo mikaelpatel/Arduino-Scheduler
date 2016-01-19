@@ -1,5 +1,5 @@
 /**
- * @file SchedulerBlinkTemplate.ino
+ * @file Blink.h
  * @version 1.0
  *
  * @section License
@@ -16,26 +16,27 @@
  * Lesser General Public License for more details.
  *
  * @section Description
- * This Arduino sketch uses the Scheduler library. Rewrite of
- * SchedulerBlink with template class.
+ * This Arduino sketch uses the Scheduler library.
+ * Blink as a template class.
  */
 
-#include <Scheduler.h>
-#include "Blink.h"
+#ifndef BLINK_H
+#define BLINK_H
 
-// Blink task definitions with pin and delay period
-Blink<11, 500> blink1;
-Blink<12, 250> blink2;
-Blink<13, 1000> blink3;
+template<int PIN, unsigned int MS>
+class Blink {
+public:
+  static void setup()
+  {
+    pinMode(PIN, OUTPUT);
+  }
+  static void loop()
+  {
+    digitalWrite(PIN, HIGH);
+    delay(MS);
+    digitalWrite(PIN, LOW);
+    delay(MS);
+  }
+};
 
-void setup()
-{
-  Scheduler.start(blink1.setup, blink1.loop);
-  Scheduler.start(blink2.setup, blink2.loop);
-  Scheduler.start(blink3.setup, blink3.loop);
-}
-
-void loop()
-{
-  yield();
-}
+#endif
