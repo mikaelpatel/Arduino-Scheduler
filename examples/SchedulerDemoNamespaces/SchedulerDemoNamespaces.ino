@@ -1,5 +1,5 @@
 /**
- * @file SchedulerNamespaces.ino
+ * @file SchedulerDemoNamespaces.ino
  * @version 1.0
  *
  * @section License
@@ -125,7 +125,7 @@ namespace ShellTask {
 void setup()
 {
   Serial.begin(57600);
-  Serial.println(F("SchedulerNamespaces: started"));
+  Serial.println(F("SchedulerDemoNamespaces: started"));
 
   // Initiate tasks
   Scheduler.start(BlinkTask::setup, BlinkTask::loop);
