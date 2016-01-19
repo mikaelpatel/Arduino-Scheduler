@@ -23,6 +23,7 @@
 #include <Scheduler.h>
 #include "Debounce.h"
 
+const int BUTTON = 4;
 unsigned int count = 0;
 
 void buttonDown()
@@ -32,7 +33,7 @@ void buttonDown()
   count += 1;
 }
 
-Debounce<4, buttonDown> button;
+Debounce<BUTTON, buttonDown> button;
 
 void setup()
 {
