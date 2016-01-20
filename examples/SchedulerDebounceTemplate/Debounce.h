@@ -25,12 +25,10 @@
 template<int PIN, void (*CALLBACK)()>
 class Debounce {
 public:
-
   static void setup()
   {
     pinMode(PIN, INPUT_PULLUP);
   }
-
   static void loop()
   {
     const unsigned int DEBOUNCE = 50;
