@@ -17,7 +17,6 @@
  */
 
 #include "Scheduler.h"
-#include "Arduino.h"
 
 #define UNUSED(x) (void) (x)
 
@@ -53,8 +52,8 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   // Adjust stack size with size of task context
   stackSize += sizeof(task_t);
 
-  // Check that task can be allocated
-  unsigned char stack[s_top];
+  // Check that the task can be allocated
+  uint8_t stack[s_top];
   if (s_main.stack == NULL) s_main.stack = stack;
   int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
   int STACKSTART = ((int) stack) - stackSize;
@@ -64,10 +63,10 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   // Adjust stack top for next task allocation
   s_top += stackSize;
 
-  // Adjust max heap limit
+  // Adjust heap limit
   __malloc_heap_end = (char*) STACKSTART;
 
-  // Initiate task with given functions and stack
+  // Initiate task with given functions and stack top
   init(taskSetup, taskLoop, stack - stackSize);
   return (true);
 }
@@ -88,7 +87,7 @@ size_t SchedulerClass::stack()
   return (&marker - s_running->stack);
 }
 
-void SchedulerClass::init(func_t setup, func_t loop, void* stack)
+void SchedulerClass::init(func_t setup, func_t loop, const uint8_t* stack)
 {
   UNUSED(stack);
   task_t task;
@@ -96,9 +95,9 @@ void SchedulerClass::init(func_t setup, func_t loop, void* stack)
   // Add task last in run queue
   task.next = &s_main;
   task.prev = s_main.prev;
-  task.prev->next = &task;
-  task.next->prev = &task;
-  task.stack = (unsigned char*) stack;
+  s_main.prev->next = &task;
+  s_main.prev = &task;
+  task.stack = stack;
 
   // Create context for new task, caller will return
   if (setjmp(task.context)) {

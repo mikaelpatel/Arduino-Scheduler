@@ -21,6 +21,7 @@
 
 #include <setjmp.h>
 #include <stddef.h>
+#include <stdint.h>
 
 class SchedulerClass {
 public:
@@ -77,7 +78,7 @@ protected:
    * @param[in] loop task function (may not be NULL).
    * @param[in] stack top reference.
    */
-  static void init(func_t setup, func_t loop, void* stack);
+  static void init(func_t setup, func_t loop, const uint8_t* stack);
 
   /**
    * Task run-time structure.
@@ -86,7 +87,7 @@ protected:
     task_t* next;		//!< Next task.
     task_t* prev;		//!< Previous task.
     jmp_buf context;		//!< Task context.
-    unsigned char* stack;	//!< Task stack.
+    const uint8_t* stack;	//!< Task stack.
   };
 
   /** Main task. */
