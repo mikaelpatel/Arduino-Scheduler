@@ -1,5 +1,5 @@
 /**
- * @file Trace.h
+ * @file Clock.h
  * @version 1.0
  *
  * @section License
@@ -16,25 +16,28 @@
  * Lesser General Public License for more details.
  *
  * @section Description
- * Some serial trace support macros.
+ * Clock as a task.
  */
 
-#ifndef TRACE_H
-#define TRACE_H
+#ifndef CLOCK_H
+#define CLOCK_H
 
-#define TRACE(msg)					\
-  do {							\
-    Serial.print(millis());				\
-    Serial.print(':');					\
-    Serial.print(__PRETTY_FUNCTION__);			\
-    Serial.print(':');					\
-    Serial.print(F(msg));				\
-  } while (0)
+#include "Trace.h"
 
-#define TRACELN(msg)					\
-  do {							\
-    TRACE(msg);						\
-    Serial.println();					\
-  } while (0)
+namespace Clock {
+
+  volatile unsigned long seconds = 0;
+
+  void setup()
+  {
+  }
+
+  void loop()
+  {
+    unsigned long start = millis();
+    await(millis() - start >= 1000);
+    seconds += 1;
+  }
+};
 
 #endif

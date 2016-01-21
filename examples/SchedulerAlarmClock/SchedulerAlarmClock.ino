@@ -1,5 +1,5 @@
 /**
- * @file SchedulerDebounceTemplate.ino
+ * @file SchedulerAlarmClock.ino
  * @version 1.0
  *
  * @section License
@@ -16,36 +16,40 @@
  * Lesser General Public License for more details.
  *
  * @section Description
- * This Arduino sketch shows how to use the Scheduler library;
- * Rewrite of SchedulerDebounce with Debounce task template class.
+ * This Arduino sketch shows how to use the Scheduler library.
  */
 
 #include <Scheduler.h>
-#include "Debounce.h"
 
-const int BUTTON = 4;
-unsigned int count = 0;
-
-void buttonDown()
-{
-  Serial.print(millis());
-  Serial.println(F(":buttonDown"));
-  count += 1;
-}
-
-Debounce<BUTTON, buttonDown> button;
+#include "Trace.h"
+#include "Clock.h"
+#include "Alarm.h"
 
 void setup()
 {
   Serial.begin(57600);
-  Serial.println(F("SchedulerDebounceTemplate: started"));
-  Scheduler.start(button.setup, button.loop);
+  Serial.println(F("SchedulerAlarmClock: started"));
+
+  // Initiate tasks
+  Scheduler.start(Clock::setup, Clock::loop);
+  Scheduler.start(Alarm::setup, Alarm::loop);
+
+  // Set alarm time
+  Alarm::time = 15;
 }
 
 void loop()
 {
+  unsigned long seconds = Clock::seconds;
+  unsigned long minutes = seconds / 60;
+  unsigned long hours = minutes / 60;
   Serial.print(millis());
-  Serial.print(F(":loop::count="));
-  Serial.println(count);
-  delay(1000);
+  Serial.print(':');
+  Serial.print(hours);
+  Serial.print(':');
+  Serial.print(minutes % 60);
+  Serial.print(':');
+  Serial.println(seconds % 60);
+  await(seconds != Clock::seconds);
 }
+

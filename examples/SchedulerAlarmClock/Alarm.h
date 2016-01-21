@@ -1,5 +1,5 @@
 /**
- * @file Trace.h
+ * @file Alarm.h
  * @version 1.0
  *
  * @section License
@@ -16,25 +16,31 @@
  * Lesser General Public License for more details.
  *
  * @section Description
- * Some serial trace support macros.
+ * Alarm task.
  */
 
-#ifndef TRACE_H
-#define TRACE_H
+#ifndef ALARM_H
+#define ALARM_H
 
-#define TRACE(msg)					\
-  do {							\
-    Serial.print(millis());				\
-    Serial.print(':');					\
-    Serial.print(__PRETTY_FUNCTION__);			\
-    Serial.print(':');					\
-    Serial.print(F(msg));				\
-  } while (0)
+#include "Clock.h"
+#include "Trace.h"
 
-#define TRACELN(msg)					\
-  do {							\
-    TRACE(msg);						\
-    Serial.println();					\
-  } while (0)
+namespace Alarm {
 
+  unsigned long time = 0;
+
+  void setup()
+  {
+  }
+
+  void loop()
+  {
+    unsigned long seconds = Clock::seconds;
+    if ((time != 0) && (seconds == time)) {
+      Serial.println(F("alarm"));
+      time += 20;
+    }
+    await(seconds != Clock::seconds);
+  }
+};
 #endif
