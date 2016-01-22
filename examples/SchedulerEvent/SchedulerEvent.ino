@@ -77,7 +77,7 @@ void loop()
 {
   static unsigned int i = 1;
   Serial.print(millis());
-  Serial.print(F(":loop::i="));
+  Serial.print(F(":loop::event="));
   Serial.println(i);
   delay(1000);
   event.signal(i);

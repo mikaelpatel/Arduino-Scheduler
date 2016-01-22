@@ -41,7 +41,7 @@ void loop()
   // Push events
   static unsigned int event = 0;
   Serial.print(millis());
-  Serial.print(F(":loop::event="));
+  Serial.print(F(":loop::push event="));
   Serial.println(event);
   eventq.push(&event);
   event += 1;
@@ -59,7 +59,7 @@ void eventHandler()
   Serial.print(F(":eventHandler#"));
   Serial.print((int) &event);
   Serial.print(':');
-  Serial.print(F("::event="));
+  Serial.print(F("::pull event="));
   Serial.println(event);
 
   // Random service time
