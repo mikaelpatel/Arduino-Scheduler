@@ -3,7 +3,7 @@
  * @version 1.0
  *
  * @section License
- * Copyright (C) Mikael Patel, 2015
+ * Copyright (C) 2015-2016, Mikael Patel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
