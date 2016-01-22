@@ -26,7 +26,7 @@
  */
 template <class T, uint8_t NMEMB>
 class Queue {
-  static_assert(NMEMB && !(NMEMB & (NMEMB - 1)), "NMEMB should be power of 2");
+  static_assert(NMEMB && !(NMEMB & (NMEMB - 1)), "Queue::NMEMB should be power of 2");
 public:
   /**
    * Construct a ring-buffer queue with given number of members and
