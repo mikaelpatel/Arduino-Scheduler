@@ -22,38 +22,7 @@
  */
 
 #include <Scheduler.h>
-
-class Semaphore {
-public:
-  /**
-   * Initiate semaphore with given count (non zero).
-   * @param[in] count.
-   */
-  Semaphore(unsigned int count = 1) : m_count(count) {}
-
-  /**
-   * Wait for semaphore count.
-   * @param[in] count.
-   */
-  void wait(unsigned int count = 1)
-  {
-    await(m_count >= count);
-    m_count -= count;
-  }
-
-  /**
-   * Signal semaphore count.
-   * @param[in] count.
-   */
-  void signal(unsigned int count = 1)
-  {
-    m_count += count;
-    yield();
-  }
-
-protected:
-  volatile unsigned int m_count;
-};
+#include "Semaphore.h"
 
 Semaphore mutex;
 
@@ -80,11 +49,10 @@ void loop()
     Serial.print(F(", wait="));
     Serial.println(ms);
     Serial.flush();
-    delay(random(200));
+    delay(100);
   }
   mutex.signal();
-
-  delay(500);
+  delay(random(300));
   i += 1;
 }
 
