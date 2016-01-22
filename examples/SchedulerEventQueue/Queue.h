@@ -63,7 +63,7 @@ public:
    */
   void push(T* data)
   {
-    while (!room()) yield();
+    await(room());
     unsigned int next = (m_put + 1) & MASK;
     m_buffer[next] = *data;
     m_put = next;
@@ -76,7 +76,7 @@ public:
    */
   void push_P(const T* data)
   {
-    while (!room()) yield();
+    await(room());
     unsigned int next = (m_put + 1) & MASK;
     memcpy_P(&m_buffer[next], data, sizeof(T));
     m_put = next;
@@ -89,7 +89,7 @@ public:
    */
   void pull(T* data)
   {
-    while (!available()) yield();
+    await(available());
     unsigned int next = (m_get + 1) & MASK;
     m_get = next;
     *data = m_buffer[next];
