@@ -18,16 +18,17 @@
 
 #include "Scheduler.h"
 
-#define UNUSED(x) (void) (x)
-
+// Heap referenes for AVR
 #if defined(ARDUINO_ARCH_AVR)
 extern int __heap_start, *__brkval;
 extern char* __malloc_heap_end;
 extern size_t __malloc_margin;
 #endif
 
+// Single-ton
 SchedulerClass Scheduler;
 
+// Main task and run queue
 SchedulerClass::task_t SchedulerClass::s_main = {
   &SchedulerClass::s_main,
   &SchedulerClass::s_main,
@@ -35,8 +36,10 @@ SchedulerClass::task_t SchedulerClass::s_main = {
   NULL
 };
 
+// Reference running task
 SchedulerClass::task_t* SchedulerClass::s_running = &SchedulerClass::s_main;
 
+// Initial top stack for task allocation
 size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 
 bool SchedulerClass::begin(size_t stackSize)
@@ -100,10 +103,8 @@ size_t SchedulerClass::stack()
 
 void SchedulerClass::init(func_t setup, func_t loop, const uint8_t* stack)
 {
-  UNUSED(stack);
+  // Add task last in run queue (main task)
   task_t task;
-
-  // Add task last in run queue
   task.next = &s_main;
   task.prev = s_main.prev;
   s_main.prev->next = &task;

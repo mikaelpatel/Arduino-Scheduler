@@ -25,28 +25,18 @@
 
 class SchedulerClass {
 public:
-  /** Default stack size. */
-#if defined(ARDUINO_ARCH_AVR)
-  static const size_t DEFAULT_STACK_SIZE = 128;
-#elif defined(ARDUINO_ARCH_SAM)
-  static const size_t DEFAULT_STACK_SIZE = 512;
-  static const size_t STACK_MAX = 32768;
-#else
-#error "Scheduler.h: board not supported"
-#endif
-
   /**
    * Function prototype (task setup and loop functions).
    */
   typedef void (*func_t)();
 
   /**
-   * Initiate the scheduler and main task with given stack size.
-   * Should be called before start of any tasks if the main task
-   * requires a stack size other than the default size. Returns true
-   * if successful otherwise false.
+   * Initiate scheduler and main task with given stack size. Should
+   * be called before start of any tasks if the main task requires a
+   * stack size other than the default size. Returns true if
+   * successful otherwise false.
    * @param[in] stackSize in bytes.
-   * @return bool
+   * @return bool.
    */
   static bool begin(size_t stackSize = DEFAULT_STACK_SIZE);
 
@@ -59,7 +49,7 @@ public:
    * @param[in] taskSetup function (may be NULL).
    * @param[in] taskLoop function (may not be NULL).
    * @param[in] stackSize in bytes.
-   * @return bool
+   * @return bool.
    */
   static bool start(func_t taskSetup,
 		    func_t taskLoop,
@@ -79,8 +69,8 @@ public:
 protected:
   /**
    * Initiate a task with the given functions and stack. When control
-   * is yield to the task the setup function is first run and then the
-   * loop function is repeated.
+   * is yield to the task the setup function is first called and then
+   * the loop function is repeatedly called.
    * @param[in] setup task function (may be NULL).
    * @param[in] loop task function (may not be NULL).
    * @param[in] stack top reference.
@@ -97,6 +87,19 @@ protected:
     const uint8_t* stack;	//!< Task stack.
   };
 
+#if defined(ARDUINO_ARCH_AVR)
+  /** Default stack size. */
+  static const size_t DEFAULT_STACK_SIZE = 128;
+
+#elif defined(ARDUINO_ARCH_SAM)
+  /** Default stack size and stack max. */
+  static const size_t DEFAULT_STACK_SIZE = 512;
+  static const size_t STACK_MAX = 32768;
+
+#else
+#error "Scheduler.h: board not supported"
+#endif
+
   /** Main task. */
   static task_t s_main;
 
@@ -107,6 +110,7 @@ protected:
   static size_t s_top;
 };
 
+/** Scheduler single-ton. */
 extern SchedulerClass Scheduler;
 
 /**
