@@ -21,7 +21,6 @@
 
 #include <Scheduler.h>
 
-#include "Trace.h"
 #include "Clock.h"
 #include "Alarm.h"
 

@@ -61,7 +61,7 @@ public:
    * Push given data into queue. Will yield until room is available.
    * @param[in] data pointer to data buffer.
    */
-  void push(T* data)
+  void push(const T* data)
   {
     await(room());
     unsigned int next = (m_put + 1) & MASK;

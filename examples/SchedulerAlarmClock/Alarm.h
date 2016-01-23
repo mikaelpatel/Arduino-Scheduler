@@ -23,7 +23,6 @@
 #define ALARM_H
 
 #include "Clock.h"
-#include "Trace.h"
 
 namespace Alarm {
 

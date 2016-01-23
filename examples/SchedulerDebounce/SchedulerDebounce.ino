@@ -45,7 +45,6 @@ volatile int state;
 void debounceSetup()
 {
   pinMode(BUTTON, INPUT_PULLUP);
-  state = digitalRead(BUTTON);
 }
 
 void debounceLoop()

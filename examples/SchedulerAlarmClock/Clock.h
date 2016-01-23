@@ -22,8 +22,6 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
-#include "Trace.h"
-
 namespace Clock {
 
   volatile unsigned long seconds = 0;

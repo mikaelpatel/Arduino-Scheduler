@@ -66,7 +66,7 @@ void setup()
 
 void loop()
 {
-  // Print the iteraction count
+  // Print the iteration count
   static unsigned int i = 0;
   Serial.print(millis());
   Serial.print(F(":loop::i="));

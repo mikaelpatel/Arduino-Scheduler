@@ -36,7 +36,7 @@ void alarm(unsigned long ms)
   count = 0;
 }
 
-Watchdog<10, alarm> watchdog;
+Watchdog<15, alarm> watchdog;
 
 void setup()
 {
@@ -47,7 +47,7 @@ void setup()
 
 void loop()
 {
-  delayMicroseconds(random(11000));
+  delayMicroseconds(random(17000));
   yield();
   count += 1;
 }

@@ -25,9 +25,9 @@
  * 3. Start a task: 20 us
  * 4. Yield between two tasks: 26.16 us
  * 5. Delay 10 ms and check increments: 10028:338, 29.67 us
- * 6. Start 47 tasks: 840:47, 17.87 us
- * 7. Yield and check increments: 660:48, 13.75 us
- * 8. Delay 10 ms and check increments: 10656:768, 13.88 us
+ * 6. Start 79 tasks: 1380:79, 17.47 us
+ * 7. Yield and check increments: 1088:80, 13.60 us
+ * 8. Delay 10 ms and check increments: 10992:800, 13.74 us
  *
  * @section Results Arduino 1.6.7, Pro-Mini
  * SchedulerBenchmark: started
@@ -36,9 +36,9 @@
  * 3. Start a task: 16 us
  * 4. Yield between two tasks: 22.89 us
  * 5. Delay 10 ms and check increments: 10028:381, 26.32 us
- * 6. Start 8 tasks: 144:8, 18.00 us
- * 7. Yield and check increments: 120:9, 13.33 us
- * 8. Delay 10 ms and check increments: 10088:747, 13.50 us
+ * 6. Start 14 tasks: 236:14, 16.86 us
+ * 7. Yield and check increments: 188:15, 12.53 us
+ * 8. Delay 10 ms and check increments: 10036:780, 12.87 us
  */
 
 #include <Scheduler.h>
@@ -115,7 +115,7 @@ void setup()
   // 6. Measure max number of tasks
   start = micros();
   nr = 0;
-  while (Scheduler.start(NULL, incrementCounter)) nr++;
+  while (Scheduler.start(NULL, incrementCounter, 64)) nr++;
   stop = micros();
   us = stop - start;
   Serial.print(F("6. Start "));

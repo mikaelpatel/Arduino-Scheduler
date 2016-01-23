@@ -37,12 +37,13 @@ template<int pin, unsigned int ms> void loopBlink()
 
 void setup()
 {
+  setupBlink<13>();
+  Scheduler.start(setupBlink<10>, loopBlink<10,250>);
   Scheduler.start(setupBlink<11>, loopBlink<11,500>);
-  Scheduler.start(setupBlink<12>, loopBlink<12,250>);
-  Scheduler.start(setupBlink<13>, loopBlink<13,1000>);
+  Scheduler.start(setupBlink<12>, loopBlink<12,750>);
 }
 
 void loop()
 {
-  yield();
+  loopBlink<13,1000>();
 }
