@@ -26,11 +26,13 @@
 class SchedulerClass {
 public:
   /** Default stack size. */
-#ifndef ARDUINO_ARCH_SAM
+#if defined(ARDUINO_ARCH_AVR)
   static const size_t DEFAULT_STACK_SIZE = 128;
-#else
+#elif defined(ARDUINO_ARCH_SAM)
   static const size_t DEFAULT_STACK_SIZE = 512;
-  static const size_t DEFAULT_STACK_MAX = 32768;
+  static const size_t STACK_MAX = 32768;
+#else
+#error "Scheduler.h: board not supported"
 #endif
 
   /**

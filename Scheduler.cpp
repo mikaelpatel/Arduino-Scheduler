@@ -20,7 +20,7 @@
 
 #define UNUSED(x) (void) (x)
 
-#ifndef ARDUINO_ARCH_SAM
+#if defined(ARDUINO_ARCH_AVR)
 extern int __heap_start, *__brkval;
 extern char* __malloc_heap_end;
 extern size_t __malloc_margin;
@@ -54,11 +54,12 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   // Adjust stack size with size of task context
   stackSize += sizeof(task_t);
 
-  // Check that the task can be allocated
+  // Allocate stack(s) and check if main stack top should be set
   uint8_t stack[s_top];
   if (s_main.stack == NULL) s_main.stack = stack;
 
-#ifndef ARDUINO_ARCH_SAM
+#if defined(ARDUINO_ARCH_AVR)
+  // Check that the task can be allocated
   int HEAPEND = (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
   int STACKSTART = ((int) stack) - stackSize;
   HEAPEND += __malloc_margin;
@@ -66,8 +67,11 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
 
   // Adjust heap limit
   __malloc_heap_end = (char*) STACKSTART;
-#else
-  if (s_top + stackSize > DEFAULT_STACK_MAX) return (false);
+#endif
+
+#if defined(ARDUINO_ARCH_SAM)
+  // Check that the task can be allocated
+  if (s_top + stackSize > STACK_MAX) return (false);
 #endif
 
   // Adjust stack top for next task allocation
