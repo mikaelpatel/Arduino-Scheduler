@@ -58,7 +58,6 @@ void eventHandler()
   Serial.print(millis());
   Serial.print(F(":eventHandler#"));
   Serial.print((int) &event);
-  Serial.print(':');
   Serial.print(F("::pull event="));
   Serial.println(event);
 
