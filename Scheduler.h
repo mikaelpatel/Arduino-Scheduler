@@ -26,7 +26,12 @@
 class SchedulerClass {
 public:
   /** Default stack size. */
+#ifndef ARDUINO_ARCH_SAM
   static const size_t DEFAULT_STACK_SIZE = 128;
+#else
+  static const size_t DEFAULT_STACK_SIZE = 512;
+  static const size_t DEFAULT_STACK_MAX = 32768;
+#endif
 
   /**
    * Function prototype (task setup and loop functions).

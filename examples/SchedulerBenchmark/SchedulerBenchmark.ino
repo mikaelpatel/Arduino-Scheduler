@@ -18,27 +18,38 @@
  * @section Description
  * Benchmark Scheduler library.
  *
- * @section Results Arduino 1.6.7, Mega 2560
- * SchedulerBenchmark: started
- * 1. Initiate scheduler and main task: 4 us
- * 2. Yield main task: 12.64 us
- * 3. Start a task: 20 us
- * 4. Yield between two tasks: 26.16 us
- * 5. Delay 10 ms and check increments: 10028:338, 29.67 us
- * 6. Start 79 tasks: 1380:79, 17.47 us
- * 7. Yield and check increments: 1088:80, 13.60 us
- * 8. Delay 10 ms and check increments: 10992:800, 13.74 us
- *
- * @section Results Arduino 1.6.7, Pro-Mini
+ * @section Results Arduino 1.6.7, Arduino Pro-Mini
  * SchedulerBenchmark: started
  * 1. Initiate scheduler and main task: 4 us
  * 2. Yield main task: 11.00 us
  * 3. Start a task: 16 us
  * 4. Yield between two tasks: 22.89 us
  * 5. Delay 10 ms and check increments: 10028:381, 26.32 us
- * 6. Start 14 tasks: 236:14, 16.86 us
- * 7. Yield and check increments: 188:15, 12.53 us
- * 8. Delay 10 ms and check increments: 10036:780, 12.87 us
+ * 6. Start 8 tasks: 140:8, 17.50 us
+ * 7. Yield and check increments: 120:9, 13.33 us
+ * 8. Delay 10 ms and check increments: 10084:747, 13.50 us
+ *
+ * @section Results Arduino 1.6.7, Arduino Mega 2560
+ * SchedulerBenchmark: started
+ * 1. Initiate scheduler and main task: 4 us
+ * 2. Yield main task: 12.64 us
+ * 3. Start a task: 20 us
+ * 4. Yield between two tasks: 26.16 us
+ * 5. Delay 10 ms and check increments: 10028:338, 29.67 us
+ * 6. Start 47 tasks: 824:47, 17.53 us
+ * 7. Yield and check increments: 660:48, 13.75 us
+ * 8. Delay 10 ms and check increments: 10656:768, 13.88 us
+ *
+ * @section Results Arduino 1.6.7, Arduino Due
+ *  SchedulerBenchmark: started
+ * 1. Initiate scheduler and main task: 1 us
+ * 2. Yield main task: 1.36 us
+ * 3. Start a task: 4 us
+ * 4. Yield between two tasks: 2.92 us
+ * 5. Delay 10 ms and check increments: 9711:3133, 3.10 us
+ * 6. Start 51 tasks: 112:51, 2.20 us
+ * 7. Yield and check increments: 81:52, 1.56 us
+ * 8. Delay 10 ms and check increments: 9939:6292, 1.58 us
  */
 
 #include <Scheduler.h>
@@ -56,7 +67,7 @@ void setup()
 
   // 1. Measure initiate scheduler
   start = micros();
-  Scheduler.begin(128);
+  Scheduler.begin();
   stop = micros();
   us = stop - start;
   Serial.print(F("1. Initiate scheduler and main task: "));
@@ -115,7 +126,7 @@ void setup()
   // 6. Measure max number of tasks
   start = micros();
   nr = 0;
-  while (Scheduler.start(NULL, incrementCounter, 64)) nr++;
+  while (Scheduler.start(NULL, incrementCounter)) nr++;
   stop = micros();
   us = stop - start;
   Serial.print(F("6. Start "));

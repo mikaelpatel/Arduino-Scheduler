@@ -1,8 +1,9 @@
 # Arduino-Scheduler
 
-This library implements a sub-set of Arduino Scheduler class. Multiple
-loop() functions may be started and run in a collaborative
-multi-tasking style. The tasks are run until they call yield().
+This library implements an extended sub-set of Arduino Scheduler
+class. Multiple loop() functions may be started and run in a
+collaborative multi-tasking style. The tasks are run until they call
+yield().
 
 The Arduino yield() function is replaced by a SchedulerClass
 implementation which allows context switching. A task must call
