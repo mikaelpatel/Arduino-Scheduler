@@ -24,5 +24,7 @@ loop functions.
 The Scheduler is a single-ton. The library creates the single
 instance.
 
+The library supports AVR and SAM based boards; e.g. Arduino Pro-Mini,
+Mega, Due.
 
 
