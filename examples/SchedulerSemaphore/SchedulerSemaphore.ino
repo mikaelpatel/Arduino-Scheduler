@@ -22,7 +22,7 @@
  */
 
 #include <Scheduler.h>
-#include "Semaphore.h"
+#include <Scheduler/Semaphore.h>
 
 Semaphore mutex;
 

@@ -1,9 +1,9 @@
 /**
- * @file Queue.h
+ * @file Scheduler/Queue.h
  * @version 1.0
  *
  * @section License
- * Copyright (C) 2012-2015, Mikael Patel
+ * Copyright (C) 2015-2016, Mikael Patel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,8 +16,8 @@
  * Lesser General Public License for more details.
  */
 
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef SCHEDULER_QUEUE_H
+#define SCHEDULER_QUEUE_H
 
 /**
  * Template class for ring-buffer of queueing data elements.

@@ -1,5 +1,5 @@
 /**
- * @file Semaphore.h
+ * @file Scheduler/Semaphore.h
  * @version 1.0
  *
  * @section License
@@ -16,8 +16,8 @@
  * Lesser General Public License for more details.
  */
 
-#ifndef SEMAPHORE_H
-#define SEMAPHORE_H
+#ifndef SCHEDULER_SEMAPHORE_H
+#define SCHEDULER_SEMAPHORE_H
 
 #include <Scheduler.h>
 

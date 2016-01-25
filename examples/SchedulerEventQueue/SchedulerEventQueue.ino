@@ -21,7 +21,7 @@
  */
 
 #include <Scheduler.h>
-#include "Queue.h"
+#include <Scheduler/Queue.h>
 
 Queue<unsigned int, 8> eventq;
 
