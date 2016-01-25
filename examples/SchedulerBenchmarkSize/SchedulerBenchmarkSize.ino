@@ -1,5 +1,5 @@
 /**
- * @file SchedulerSize.ino
+ * @file SchedulerBenchmarkSize.ino
  * @version 1.0
  *
  * @section License
@@ -16,7 +16,7 @@
  * Lesser General Public License for more details.
  *
  * @section Description
- * Size of Scheduler library.
+ * Benchmark size of Scheduler library.
  *
  * @section Results Arduino 1.6.7
  * Board		Baseline 	Total		Size
@@ -25,6 +25,7 @@
  * Arduino Due		10196/--	10420/--  	224/--
  */
 
+// Comment for baseline
 #define TASKS
 
 #ifdef TASKS
@@ -34,7 +35,7 @@
 void setup()
 {
   Serial.begin(57600);
-  Serial.println(F("SchedulerSize: started"));
+  Serial.println(F("SchedulerBenchmarkSize: started"));
   Serial.flush();
 
 #ifdef TASKS
