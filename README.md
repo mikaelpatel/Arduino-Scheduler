@@ -25,9 +25,6 @@ bytes for SAM).
 The Scheduler is a single-ton. The library creates the single
 instance.
 
-The library supports AVR and SAM based boards; e.g. Arduino Pro-Mini,
-Mega, Due.
-
 ## Install
 
 Download and unzip the Arduino-Scheduler library into your sketchbook
@@ -38,7 +35,8 @@ File>Sketchbook menu.
 
 ## Performance
 
-There are several benchmark sketches in the examples directory.
+There are several benchmark sketches in the examples directory. Below
+are some of the results.
 
 ### Context Switch
 
@@ -50,16 +48,16 @@ Arduino Due | 1.36
 
 ### Max Tasks (default stack size)
 
-Board | tasks
-------|------
-Arduino Uno, Nano, Pro-Mini, etc | 8
-Arduino Mega 2560 | 47
-Arduino Due | 51
+Board | Tasks | Stack (bytes)
+------|-------|--------------
+Arduino Uno, Nano, Pro-Mini, etc | 9 | 128
+Arduino Mega 2560 | 48 | 128
+Arduino Due | 52 | 512
 
 ### Memory Size
 
 Board | PROGMEM | SRAM (bytes)
-------|---------|------------
+------|---------|-------------
 Arduino Uno, Nano, Pro-Mini, etc | 546 | 42
 Arduino Mega 2560 | 548 | 44
 Arduino Due | 224 | NA
