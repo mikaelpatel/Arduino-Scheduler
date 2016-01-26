@@ -1,5 +1,5 @@
 /**
- * @file SchedulerBenchmarkQueue.ino
+ * @file SchedulerBenchmarkSemaphore.ino
  * @version 1.0
  *
  * @section License
@@ -16,28 +16,25 @@
  * Lesser General Public License for more details.
  *
  * @section Description
- * Benchmark Scheduler Queue.
+ * Benchmark Scheduler Semaphore.
  *
  * @section Results Arduino 1.6.7
- * Events per second (push/pull).
- * Board\QUEUE_MAX	2, 8
- * Arduino Pro-Mini	24033 (41.61 us), 92652 (10.79 us)
- * Arduino Mega 2560	21470 (46.58 us), 86940 (11.50 us)
- * Arduino Due		178364 (5.61 us), 667499 (1.50 us)
+ * Semaphore wait/signal per seconds.
+ * Arduino Pro-Mini	26319 (38 us)
+ * Arduino Mega 2560	23293 (43 us)
+ * Arduino Due		210090 (4.76 us)
  */
 
 #include <Scheduler.h>
-#include <Scheduler/Queue.h>
+#include <Scheduler/Semaphore.h>
 
-const unsigned int QUEUE_MAX = 8;
-typedef int event_t;
-Queue<event_t, QUEUE_MAX> queue;
+Semaphore semaphore(0);
 unsigned long count = 0;
 
 void setup()
 {
   Serial.begin(57600);
-  Serial.println(F("SchedulerBenchmarkQueue: started"));
+  Serial.println(F("SchedulerBenchmarkSemaphore: started"));
   Serial.flush();
 
   Scheduler.start(NULL, producer);
@@ -59,15 +56,13 @@ void loop()
 
 void producer()
 {
-  event_t event = 0;
-  while (1) queue.push(&event);
+  while (1) semaphore.signal();
 }
 
 void consumer()
 {
-  event_t event;
   while (1) {
-    queue.pull(&event);
+    semaphore.wait();
     count += 1;
   }
 }
