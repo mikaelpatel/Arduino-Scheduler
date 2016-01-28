@@ -20,9 +20,9 @@
  *
  * @section Results Arduino 1.6.7
  * Board		Baseline 	Total		Size
- * Arduino Pro-Mini	1802/200 	2348/242	546/42
- * Arduino Mega 2560	2090/200	2638/244	548/44
- * Arduino Due		10196/--	10420/--  	224/--
+ * Arduino Pro-Mini	1810/200 	2356/242	546/42
+ * Arduino Mega 2560	2098/200	2646/244	548/44
+ * Arduino Due		10204/--	10428/--  	224/--
  */
 
 // Comment for baseline
