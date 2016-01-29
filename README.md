@@ -40,11 +40,11 @@ are some of the results.
 
 ### Context Switch
 
-Board | us
-------|---
-Arduino Uno, Nano, Pro-Mini, etc | 11.00
-Arduino Mega 2560 | 12.64
-Arduino Due | 1.36
+Board | us | cycles
+------|----|-------
+Arduino Uno, Nano, Pro-Mini, etc | 11.00 | 176
+Arduino Mega 2560 | 12.64 | 203
+Arduino Due | 1.36 | 115
 
 ### Max Tasks (default stack size)
 
@@ -54,7 +54,7 @@ Arduino Uno, Nano, Pro-Mini, etc | 9 | 128
 Arduino Mega 2560 | 48 | 128
 Arduino Due | 52 | 512
 
-### Memory Size
+### Memory Footprint
 
 Board | PROGMEM | SRAM (bytes)
 ------|---------|-------------
