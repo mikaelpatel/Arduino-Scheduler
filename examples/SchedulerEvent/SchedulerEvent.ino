@@ -69,6 +69,7 @@ Event event;
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerEvent: started"));
   Scheduler.start(NULL, eventHandler);
 }

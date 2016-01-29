@@ -30,6 +30,7 @@
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerDemo: started"));
 
   Serial.print(millis());

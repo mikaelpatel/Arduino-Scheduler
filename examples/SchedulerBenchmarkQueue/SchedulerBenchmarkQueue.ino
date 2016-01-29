@@ -24,12 +24,13 @@
  * Arduino Pro-Mini	24033 (41.61 us), 92652 (10.79 us)
  * Arduino Mega 2560	21470 (46.58 us), 86940 (11.50 us)
  * Arduino Due		178364 (5.61 us), 667499 (1.50 us)
+ * Teensy 3.1 (72 MHz)	251880 (3.97 us), 973938 (1.03 us)
  */
 
 #include <Scheduler.h>
 #include <Scheduler/Queue.h>
 
-const unsigned int QUEUE_MAX = 8;
+const unsigned int QUEUE_MAX = 2;
 typedef int event_t;
 Queue<event_t, QUEUE_MAX> queue;
 unsigned long count = 0;
@@ -37,6 +38,7 @@ unsigned long count = 0;
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerBenchmarkQueue: started"));
   Serial.flush();
 

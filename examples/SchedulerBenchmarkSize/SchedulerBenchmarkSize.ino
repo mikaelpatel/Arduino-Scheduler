@@ -23,6 +23,7 @@
  * Arduino Pro-Mini	1810/200 	2356/242	546/42
  * Arduino Mega 2560	2098/200	2646/244	548/44
  * Arduino Due		10204/--	10428/--  	224/--
+ * Teensy 3.1 (72 MHz)	16312/4644	10556/4304	???/???
  */
 
 // Comment for baseline
@@ -35,6 +36,7 @@
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerBenchmarkSize: started"));
   Serial.flush();
 

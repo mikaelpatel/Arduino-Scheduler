@@ -28,6 +28,7 @@ volatile unsigned int period = 0;
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerBlinkController: started"));
 
   pinMode(LED, OUTPUT);

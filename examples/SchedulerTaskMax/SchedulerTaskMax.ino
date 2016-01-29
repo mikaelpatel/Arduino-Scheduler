@@ -27,6 +27,7 @@ unsigned long count = 0L;
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerTaskMax: started"));
   Serial.flush();
 

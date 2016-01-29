@@ -27,6 +27,7 @@
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerAlarmClock: started"));
 
   // Initiate tasks

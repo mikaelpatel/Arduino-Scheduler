@@ -87,7 +87,16 @@ protected:
     const uint8_t* stack;	//!< Task stack.
   };
 
-#if defined(ARDUINO_ARCH_AVR)
+#if defined(TEENSYDUINO) && defined(__MK20DX256__)
+  /** Default stack size and stack max. */
+  static const size_t DEFAULT_STACK_SIZE = 512;
+  static const size_t STACK_MAX = 16384;
+
+  // Clean up symbol definition
+# undef ARDUINO_ARCH_AVR
+# define TEENSY_ARCH_ARM
+
+#elif defined(ARDUINO_ARCH_AVR)
   /** Default stack size. */
   static const size_t DEFAULT_STACK_SIZE = 128;
 

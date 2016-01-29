@@ -20,7 +20,7 @@ _taskSetup_ is called first and once by the task followed by repeated
 calls to _taskLoop_. This works just as the Arduino setup() and loop()
 functions. There is also an optional parameter, _taskStackSize_. The
 default value depends on the architecture (128 bytes for AVR and 512
-bytes for SAM).
+bytes for SAM/Teensy 3.1).
 
 The Scheduler is a single-ton. The library creates the single
 instance.
@@ -47,6 +47,7 @@ Board | us | cycles
 Arduino Uno, Nano, Pro-Mini, etc | 11.00 | 176
 Arduino Mega 2560 | 12.64 | 203
 Arduino Due | 1.36 | 115
+Teensy 3.1 (72 MHz) | 1.10 | 80
 
 ### Max Tasks (default stack size)
 
@@ -55,6 +56,7 @@ Board | Tasks | Stack (bytes)
 Arduino Uno, Nano, Pro-Mini, etc | 9 | 128
 Arduino Mega 2560 | 48 | 128
 Arduino Due | 52 | 512
+Teensy 3.1 (72 MHz) | 25 | 512
 
 ### Memory Footprint
 
@@ -63,6 +65,7 @@ Board | PROGMEM | SRAM (bytes)
 Arduino Uno, Nano, Pro-Mini, etc | 546 | 42
 Arduino Mega 2560 | 548 | 44
 Arduino Due | 224 | NA
+Teensy 3.1 (72 MHz) | ??? | ???
 
 
 

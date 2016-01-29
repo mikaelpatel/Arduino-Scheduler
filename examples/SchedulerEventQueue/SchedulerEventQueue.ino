@@ -28,6 +28,7 @@ Queue<unsigned int, 8> eventq;
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerEventQueue: started"));
   Serial.flush();
 

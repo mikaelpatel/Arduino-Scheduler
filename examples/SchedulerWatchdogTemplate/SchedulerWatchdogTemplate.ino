@@ -41,6 +41,7 @@ Watchdog<15, alarm> watchdog;
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerWatchdogTemplate: started"));
   Scheduler.start(watchdog.setup, watchdog.loop);
 }

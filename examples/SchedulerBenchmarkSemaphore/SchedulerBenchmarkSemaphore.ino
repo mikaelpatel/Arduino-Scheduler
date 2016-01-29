@@ -23,6 +23,7 @@
  * Arduino Pro-Mini	26319 (38 us)
  * Arduino Mega 2560	23293 (43 us)
  * Arduino Due		210090 (4.76 us)
+ * Teensy 3.1 (72 MHz)	277145 (3.61 us)
  */
 
 #include <Scheduler.h>
@@ -34,6 +35,7 @@ unsigned long count = 0;
 void setup()
 {
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerBenchmarkSemaphore: started"));
   Serial.flush();
 

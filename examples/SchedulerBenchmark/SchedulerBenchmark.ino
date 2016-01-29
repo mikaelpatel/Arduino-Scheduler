@@ -50,6 +50,17 @@
  * 6. Start 51 tasks: 112:51, 2.20 us
  * 7. Yield and check increments: 81:52, 1.56 us
  * 8. Delay 10 ms and check increments: 9939:6292, 1.58 us
+
+ * @section Results Arduino 1.6.7, Teensy 3.1 (72 MHz)
+ * SchedulerBenchmark: started
+ * 1. Initiate scheduler and main task: 1 us
+ * 2. Yield main task: 1.10 us
+ * 3. Start a task: 2 us
+ * 4. Yield between two tasks: 2.51 us
+ * 5. Delay 10 ms and check increments: 10003:3105, 3.22 us
+ * 6. Start 24 tasks: 38:24, 1.58 us
+ * 7. Yield and check increments: 30:25, 1.20 us
+ * 8. Delay 10 ms and check increments: 10015:6950, 1.44 us
  */
 
 #include <Scheduler.h>
@@ -62,6 +73,7 @@ void setup()
   int nr;
 
   Serial.begin(57600);
+  while (!Serial);
   Serial.println(F("SchedulerBenchmark: started"));
   Serial.flush();
 
