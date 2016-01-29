@@ -25,6 +25,8 @@ bytes for SAM).
 The Scheduler is a single-ton. The library creates the single
 instance.
 
+![screenshot](https://dl.dropboxusercontent.com/u/993383/Cosa/screenshots/Screenshot%20from%202013-07-29%2011%3A47%3A55.png)
+
 ## Install
 
 Download and unzip the Arduino-Scheduler library into your sketchbook
