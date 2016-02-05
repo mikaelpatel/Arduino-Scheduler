@@ -79,7 +79,7 @@ void setup()
 
   // 1. Measure initiate scheduler
   start = micros();
-  Scheduler.begin();
+  Scheduler.begin(128);
   stop = micros();
   us = stop - start;
   Serial.print(F("1. Initiate scheduler and main task: "));
