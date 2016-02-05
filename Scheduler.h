@@ -38,7 +38,7 @@ public:
    * @param[in] stackSize in bytes.
    * @return bool.
    */
-  static bool begin(size_t stackSize = DEFAULT_STACK_SIZE);
+  static bool begin(size_t stackSize);
 
   /**
    * Start a task with given functions and stack size. Should be
@@ -91,10 +91,6 @@ protected:
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 512;
   static const size_t STACK_MAX = 16384;
-
-  // Clean up symbol definition
-# undef ARDUINO_ARCH_AVR
-# define TEENSY_ARCH_ARM
 
 #elif defined(ARDUINO_ARCH_AVR)
   /** Default stack size. */

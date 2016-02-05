@@ -18,6 +18,11 @@
 
 #include "Scheduler.h"
 
+#if defined(TEENSYDUINO) && defined(__MK20DX256__)
+#undef ARDUINO_ARCH_AVR
+#define TEENSY_ARCH_ARM
+#endif
+
 // Heap referenes for AVR
 #if defined(ARDUINO_ARCH_AVR)
 extern int __heap_start, *__brkval;
