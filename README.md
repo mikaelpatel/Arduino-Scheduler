@@ -1,16 +1,16 @@
 # Arduino-Scheduler
 
-This library implements an extended sub-set of Arduino Scheduler
+This library implements an extended sub-set of the Arduino Scheduler
 class. Multiple loop() functions, tasks, may be started and run in a
 collaborative multi-tasking style. The tasks are run until they call
 yield() or delay(). The Arduino yield() function is replaced by an
 implementation in the library that allows context switching.
 
 Tasks should be viewed as static and continuous. This implementation
-does not allocated tasks on the heap. They are allocated on the normal
+does not allocate tasks on the heap. They are allocated on the normal
 stack and linked into a cyclic run queue. One-shot tasks are not
-implemented. Instead the task start function is extended with a setup
-function reference. Tasks are started with
+supported. Instead the task start function is extended with a setup
+function reference. Tasks are started with:
 
 ````
 Scheduler.start(taskSetup, taskLoop [,taskStackSize]).
@@ -22,7 +22,7 @@ functions. There is also an optional parameter, _taskStackSize_. The
 default value depends on the architecture (128 bytes for AVR and 512
 bytes for SAM/Teensy 3.1).
 
-The Scheduler is a single-ton. The library creates the single
+The Scheduler is a single-ton and the library creates the single
 instance.
 
 ![screenshot](https://dl.dropboxusercontent.com/u/993383/Cosa/screenshots/Screenshot%20from%202016-01-29%2015%3A24%3A17.png)
@@ -65,7 +65,7 @@ Board | PROGMEM | SRAM (bytes)
 Arduino Uno, Nano, Pro-Mini, etc | 546 | 42
 Arduino Mega 2560 | 548 | 44
 Arduino Due | 224 | NA
-Teensy 3.1 (72 MHz) | ??? | ???
+Teensy 3.1 (72 MHz) | NA | NA
 
 
 
