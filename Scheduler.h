@@ -101,6 +101,11 @@ protected:
   static const size_t DEFAULT_STACK_SIZE = 512;
   static const size_t STACK_MAX = 32768;
 
+#elif defined(ARDUINO_ARCH_SAMD)
+  /** Default stack size and stack max. */
+  static const size_t DEFAULT_STACK_SIZE = 512;
+  static const size_t STACK_MAX = 16384;
+
 #else
 #error "Scheduler.h: board not supported"
 #endif

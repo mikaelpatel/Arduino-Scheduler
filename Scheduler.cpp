@@ -77,7 +77,7 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   __malloc_heap_end = (char*) STACKSTART;
 #endif
 
-#if defined(ARDUINO_ARCH_SAM) || defined(TEENSY_ARCH_ARM)
+#if  defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_SAMD) || defined(TEENSY_ARCH_ARM)
   // Check that the task can be allocated
   if (s_top + stackSize > STACK_MAX) return (false);
 #endif
