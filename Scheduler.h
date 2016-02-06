@@ -86,6 +86,9 @@ protected:
     jmp_buf context;		//!< Task context.
     const uint8_t* stack;	//!< Task stack.
   };
+#if defined(ARDUINO_ARCH_SAMD)
+#define ARDUINO_ARCH_SAM
+#endif
 
 #if defined(TEENSYDUINO) && defined(__MK20DX256__)
   /** Default stack size and stack max. */
