@@ -24,14 +24,14 @@
 class Semaphore {
 public:
   /**
-   * Initiate semaphore with given count (non zero).
-   * @param[in] count.
+   * Initiate semaphore with given count.
+   * @param[in] count (default mutex).
    */
   Semaphore(unsigned int count = 1) : m_count(count) {}
 
   /**
    * Wait for semaphore count.
-   * @param[in] count.
+   * @param[in] count (default mutex).
    */
   void wait(unsigned int count = 1)
   {
@@ -41,7 +41,7 @@ public:
 
   /**
    * Signal semaphore count.
-   * @param[in] count.
+   * @param[in] count (default mutex).
    */
   void signal(unsigned int count = 1)
   {
