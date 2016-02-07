@@ -30,6 +30,10 @@
 #include <Scheduler.h>
 #include <Scheduler/Queue.h>
 
+#if defined(ARDUINO_ARCH_SAMD)
+#define Serial SerialUSB
+#endif
+
 const unsigned int QUEUE_MAX = 2;
 typedef int event_t;
 Queue<event_t, QUEUE_MAX> queue;
