@@ -44,27 +44,30 @@ are some of the results.
 
 Board | us | cycles
 ------|----|-------
-Arduino Uno, Nano, Pro-Mini, etc | 11.00 | 176
-Arduino Mega 2560 | 12.64 | 203
-Arduino Due | 1.36 | 115
+Arduino Uno, Nano, Pro-Mini, etc (16 MHz) | 11.00 | 176
+Arduino Mega 2560 (16 MHz) | 12.64 | 203
+Sparkfun SAMD21 (48 MHz) | 2.60 | 125
+Arduino Due (84 MHz) | 1.36 | 115
 Teensy 3.1 (72 MHz) | 1.10 | 80
 
 ### Max Tasks (default stack size)
 
 Board | Tasks | Stack (bytes)
 ------|-------|--------------
-Arduino Uno, Nano, Pro-Mini, etc | 9 | 128
-Arduino Mega 2560 | 48 | 128
-Arduino Due | 52 | 512
-Teensy 3.1 (72 MHz) | 25 | 512
+Arduino Uno, Nano, Pro-Mini, etc (16 MHz) | 9 | 128
+Arduino Mega 2560 (16 MHz) | 48 | 128
+Sparkfun SAMD21 (48 MHz) | 26 | 512
+Arduino Due (84 MHz) | 52 | 512
+Teensy 3.1 (72 MHz) | 26 | 512
 
 ### Memory Footprint
 
 Board | PROGMEM | SRAM (bytes)
 ------|---------|-------------
-Arduino Uno, Nano, Pro-Mini, etc | 546 | 42
-Arduino Mega 2560 | 548 | 44
-Arduino Due | 224 | NA
+Arduino Uno, Nano, Pro-Mini, etc (16 MHz) | 546 | 42
+Arduino Mega 2560 (16 MHz) | 548 | 44
+Sparkfun SAMD21 (48 MHz) | NA | NA
+Arduino Due (84 MHz) | 224 | NA
 Teensy 3.1 (72 MHz) | NA | NA
 
 
