@@ -19,18 +19,19 @@
  * Benchmark Scheduler Channel.
  *
  * @section Results Arduino 1.6.7
- * Messages per second (send/recv).
- * Arduino Pro-Mini	24328 (41.10 us)
- * Arduino Mega 2560	21704 (46.07 us)
- * Arduino Due	       168344 (5.94 us)
+ * Messages per second (send/recv). PAYLOAD 1, 8
+ * Arduino Pro-Mini	23921 (41.80 us), 22002 (45.45 us)
+ * Arduino Mega 2560	21379 (46.77 us), 19834 (50.41 us)
+ * Arduino Due		165322 (6.05 us), 160893 (6.22 us)
  */
 
 #include <Scheduler.h>
 #include <Scheduler/Channel.h>
 
-const size_t PAYLOAD_MAX = 1;
+// const size_t PAYLOAD_MAX = 1;
+const size_t PAYLOAD_MAX = 8;
 struct msg_t {
-  int payload[PAYLOAD_MAX];
+  uint8_t payload[PAYLOAD_MAX];
 };
 
 Channel chan;
@@ -51,11 +52,10 @@ void loop()
 {
   unsigned long start = millis();
   await(millis() - start >= 1000);
-  Serial.print(millis());
-  Serial.print(F(":loop::count="));
   Serial.print(count);
-  Serial.print(F(", us="));
-  Serial.println(1000000.0 / count);
+  Serial.print(F(" ("));
+  Serial.print(1000000.0 / count);
+  Serial.println(F(" us)"));
   Serial.flush();
   count = 0;
 }

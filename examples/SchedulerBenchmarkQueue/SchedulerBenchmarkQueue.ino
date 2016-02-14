@@ -19,18 +19,17 @@
  * Benchmark Scheduler Queue.
  *
  * @section Results Arduino 1.6.7
- * Events per second (push/pull).
- * Board\QUEUE_MAX	2, 8
- * Arduino Pro-Mini	24033 (41.61 us), 92652 (10.79 us)
- * Arduino Mega 2560	21470 (46.58 us), 86940 (11.50 us)
- * Arduino Due		178364 (5.61 us), 667499 (1.50 us)
- * Teensy 3.1 (72 MHz)	251880 (3.97 us), 973938 (1.03 us)
+ * Events per second (push/pull). QUEUE_MAX 2, 8
+ * Arduino Pro-Mini	24029 (41.62 us), 92638 (10.79 us)
+ * Arduino Mega 2560	21466 (46.59 us), 86919 (11.50 us)
+ * Arduino Due		183411 (5.45 us), 677502 (1.48 us)
  */
 
 #include <Scheduler.h>
 #include <Scheduler/Queue.h>
 
-const unsigned int QUEUE_MAX = 2;
+// const unsigned int QUEUE_MAX = 2;
+const unsigned int QUEUE_MAX = 8;
 typedef int event_t;
 Queue<event_t, QUEUE_MAX> queue;
 unsigned long count = 0;
@@ -50,11 +49,10 @@ void loop()
 {
   unsigned long start = millis();
   await(millis() - start >= 1000);
-  Serial.print(millis());
-  Serial.print(F(":loop::count="));
   Serial.print(count);
-  Serial.print(F(", us="));
-  Serial.println(1000000.0 / count);
+  Serial.print(F(" ("));
+  Serial.print(1000000.0 / count);
+  Serial.println(F(" us)"));
   Serial.flush();
   count = 0;
 }

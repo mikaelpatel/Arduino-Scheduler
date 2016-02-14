@@ -20,10 +20,9 @@
  *
  * @section Results Arduino 1.6.7
  * Semaphore wait/signal per seconds.
- * Arduino Pro-Mini	26319 (38 us)
- * Arduino Mega 2560	23293 (43 us)
- * Arduino Due		210090 (4.76 us)
- * Teensy 3.1 (72 MHz)	277145 (3.61 us)
+ * Arduino Pro-Mini	26337 (37.97 us)
+ * Arduino Mega 2560	23289 (42.94 us)
+ * Arduino Due		196770 (5.08 us)
  */
 
 #include <Scheduler.h>
@@ -47,11 +46,10 @@ void loop()
 {
   unsigned long start = millis();
   await(millis() - start >= 1000);
-  Serial.print(millis());
-  Serial.print(F(":loop::count="));
   Serial.print(count);
-  Serial.print(F(", us="));
-  Serial.println(1000000.0 / count);
+  Serial.print(F(" ("));
+  Serial.print(1000000.0 / count);
+  Serial.println(F(" us)"));
   Serial.flush();
   count = 0;
 }

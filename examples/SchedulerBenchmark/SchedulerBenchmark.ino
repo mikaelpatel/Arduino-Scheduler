@@ -22,35 +22,35 @@
  * SchedulerBenchmark: started
  * 1. Initiate scheduler and main task: 4 us
  * 2. Yield main task: 11.00 us
- * 3. Start a task: 16 us
+ * 3. Start a task: 20 us
  * 4. Yield between two tasks: 22.89 us
  * 5. Delay 10 ms and check increments: 10028:381, 26.32 us
- * 6. Start 8 tasks: 140:8, 17.50 us
+ * 6. Start 8 tasks: 148:8, 18.50 us
  * 7. Yield and check increments: 120:9, 13.33 us
- * 8. Delay 10 ms and check increments: 10084:747, 13.50 us
+ * 8. Delay 10 ms and check increments: 10088:747, 13.50 us
  *
  * @section Results Arduino 1.6.7, Arduino Mega 2560
  * SchedulerBenchmark: started
  * 1. Initiate scheduler and main task: 4 us
  * 2. Yield main task: 12.64 us
- * 3. Start a task: 20 us
+ * 3. Start a task: 24 us
  * 4. Yield between two tasks: 26.16 us
  * 5. Delay 10 ms and check increments: 10028:338, 29.67 us
- * 6. Start 47 tasks: 824:47, 17.53 us
- * 7. Yield and check increments: 660:48, 13.75 us
- * 8. Delay 10 ms and check increments: 10656:768, 13.88 us
+ * 6. Start 46 tasks: 860:46, 18.70 us
+ * 7. Yield and check increments: 648:47, 13.79 us
+ * 8. Delay 10 ms and check increments: 10436:752, 13.88 us
  *
  * @section Results Arduino 1.6.7, Arduino Due
  * SchedulerBenchmark: started
- * 1. Initiate scheduler and main task: 1 us
- * 2. Yield main task: 1.36 us
- * 3. Start a task: 4 us
- * 4. Yield between two tasks: 2.92 us
- * 5. Delay 10 ms and check increments: 9711:3133, 3.10 us
+ * 1. Initiate scheduler and main task: 2 us
+ * 2. Yield main task: 1.30 us
+ * 3. Start a task: 3 us
+ * 4. Yield between two tasks: 2.80 us
+ * 5. Delay 10 ms and check increments: 9497:3186, 2.98 us
  * 6. Start 51 tasks: 112:51, 2.20 us
- * 7. Yield and check increments: 81:52, 1.56 us
- * 8. Delay 10 ms and check increments: 9939:6292, 1.58 us
-
+ * 7. Yield and check increments: 78:52, 1.50 us
+ * 8. Delay 10 ms and check increments: 9874:6500, 1.52 us
+ *
  * @section Results Arduino 1.6.7, Teensy 3.1 (72 MHz)
  * SchedulerBenchmark: started
  * 1. Initiate scheduler and main task: 1 us
