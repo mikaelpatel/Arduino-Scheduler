@@ -30,8 +30,8 @@ public:
    m_buf(NULL),
    m_max(0),
    m_size(0),
-   m_tag(0),
-   m_cnt(0)
+   m_ticket(0),
+   m_serving(0)
   {}
 
   /**
@@ -45,10 +45,10 @@ public:
    */
   int send(const void* buf, size_t size)
   {
-    uint8_t tag = m_tag++;
-    await(tag == m_cnt && m_max > 0 && m_size == 0);
+    uint8_t ticket = m_ticket++;
+    await(ticket == m_serving && m_max > 0 && m_size == 0);
     if (size > m_max) {
-      m_cnt += 1;
+      m_serving += 1;
       return (-1);
     }
     memcpy(m_buf, buf, size);
@@ -69,7 +69,7 @@ public:
     m_max = size;
     m_size = 0;
     await(m_size != 0);
-    m_cnt += 1;
+    m_serving += 1;
     return (m_size);
   }
 
@@ -77,8 +77,8 @@ protected:
   void* m_buf;
   volatile size_t m_max;
   volatile size_t m_size;
-  volatile uint8_t m_tag;
-  volatile uint8_t m_cnt;
+  volatile uint8_t m_ticket;
+  volatile uint8_t m_serving;
 };
 
 #endif
