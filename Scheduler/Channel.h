@@ -24,7 +24,7 @@
 class Channel {
 public:
   /**
-   * Initiate channel.
+   * Initiate channel for message passing between tasks.
    */
  Channel() :
    m_buf(NULL),
@@ -45,12 +45,17 @@ public:
    */
   int send(const void* buf, size_t size)
   {
+    // Take a ticket and wait for service
     uint8_t ticket = m_ticket++;
-    await(ticket == m_serving && m_max > 0 && m_size == 0);
+    await(ticket == m_serving && m_buf != NULL);
+
+    // Check that the receiver buffer can hold the message
     if (size > m_max) {
       m_serving += 1;
       return (-1);
     }
+
+    // Copy message to receiver buffer
     memcpy(m_buf, buf, size);
     m_size = size;
     return (size);
@@ -65,20 +70,30 @@ public:
    */
   int recv(void* buf, size_t size)
   {
+    // Wait for the channel to be free for receive
+    await(m_buf == NULL);
     m_buf = buf;
     m_max = size;
     m_size = 0;
+
+    // Wait for message from sender
     await(m_size != 0);
+    int res = m_size;
+    m_buf = NULL;
+    m_max = 0;
+    m_size = 0;
     m_serving += 1;
+
+    // Return size of received message
     return (m_size);
   }
 
 protected:
-  void* m_buf;
-  volatile size_t m_max;
-  volatile size_t m_size;
-  volatile uint8_t m_ticket;
-  volatile uint8_t m_serving;
+  void* m_buf;			//!< Message buffer
+  volatile size_t m_max;	//!< Max message size
+  volatile size_t m_size;	//!< Actual message size
+  volatile uint8_t m_ticket;	//!< Sender ticket
+  volatile uint8_t m_serving;	//!< Next sender ticket
 };
 
 #endif

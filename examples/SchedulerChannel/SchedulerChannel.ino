@@ -35,6 +35,7 @@ void setup()
   Scheduler.start(NULL, messageSender);
   Scheduler.start(NULL, messageSender);
   Scheduler.start(NULL, messageReceiver);
+  Scheduler.start(NULL, messageReceiver);
 }
 
 void loop()
@@ -59,7 +60,7 @@ void messageSender()
     Serial.print(millis());
     Serial.print(F(":messageSender#"));
     Serial.print(msg.ref);
-    Serial.print(F("::send msg="));
+    Serial.print(F("::send msg.nr="));
     Serial.println(msg.nr);
     chan.send(&msg, sizeof(msg));
     msg.nr += 1;
@@ -72,9 +73,11 @@ void messageReceiver()
   msg_t msg;
   chan.recv(&msg, sizeof(msg));
   Serial.print(millis());
-  Serial.print(F(":messageReceiver::receive msg="));
+  Serial.print(F(":messageReceiver#"));
+  Serial.print((int) &msg);
+  Serial.print(F("::receive msg.ref="));
   Serial.print(msg.ref);
-  Serial.print(':');
+  Serial.print(F(", msg.nr="));
   Serial.println(msg.nr);
   delay(random(1000));
 }
