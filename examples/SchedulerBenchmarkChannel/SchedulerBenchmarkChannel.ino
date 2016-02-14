@@ -22,13 +22,17 @@
  * Messages per second (send/recv).
  * Arduino Pro-Mini	24328 (41.10 us)
  * Arduino Mega 2560	21704 (46.07 us)
- * Arduino Due		168344 (5.94 us)
+ * Arduino Due	       168344 (5.94 us)
  */
 
 #include <Scheduler.h>
 #include <Scheduler/Channel.h>
 
-typedef int msg_t;
+const size_t PAYLOAD_MAX = 1;
+struct msg_t {
+  int payload[PAYLOAD_MAX];
+};
+
 Channel chan;
 unsigned long count = 0;
 
@@ -58,8 +62,9 @@ void loop()
 
 void producer()
 {
-  msg_t msg = 0;
-  while (1) chan.send(&msg, sizeof(msg));
+  msg_t msg;
+  while (1)
+    chan.send(&msg, sizeof(msg));
 }
 
 void consumer()
