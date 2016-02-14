@@ -37,7 +37,7 @@ public:
   /**
    * Send given message, buffer and size, to receiving task. Wait
    * until receiver task is ready before copying message to receiver
-   * buffer. Yields to allow receiver to continue. Returns message
+   * buffer. Multiple senders will queue in order. Returns message
    * size if successful otherwise negative error code.
    * @param[in] buf message buffer.
    * @param[in] size message size.
@@ -47,7 +47,10 @@ public:
   {
     uint8_t tag = m_tag++;
     await(tag == m_cnt && m_max > 0 && m_size == 0);
-    if (size > m_max) return (-1);
+    if (size > m_max) {
+      m_cnt += 1;
+      return (-1);
+    }
     memcpy(m_buf, buf, size);
     m_size = size;
     return (size);
