@@ -17,17 +17,24 @@
  */
 
 #include "Scheduler.h"
+#include <Arduino.h>
 
+// Configuration: SRAM and heap handling
 #if defined(TEENSYDUINO) && defined(__MK20DX256__)
 #undef ARDUINO_ARCH_AVR
 #define TEENSY_ARCH_ARM
-#endif
+#define RAMEND 0x20008000
 
-// Heap referenes for AVR
-#if defined(ARDUINO_ARCH_AVR)
+#elif defined(ARDUINO_ARCH_AVR)
 extern int __heap_start, *__brkval;
 extern char* __malloc_heap_end;
 extern size_t __malloc_margin;
+
+#elif defined(ARDUINO_ARCH_SAM)
+#define RAMEND 0x20088000
+
+#elif defined(ARDUINO_ARCH_SAMD)
+#define RAMEND 0x20008000
 #endif
 
 // Single-ton
@@ -63,7 +70,8 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   stackSize += sizeof(task_t);
 
   // Allocate stack(s) and check if main stack top should be set
-  uint8_t stack[s_top];
+  size_t frame = RAMEND - (size_t) &frame;
+  uint8_t stack[s_top - frame];
   if (s_main.stack == NULL) s_main.stack = stack;
 
 #if defined(ARDUINO_ARCH_AVR)
@@ -77,7 +85,9 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   __malloc_heap_end = (char*) STACKSTART;
 #endif
 
-#if  defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_SAMD) || defined(TEENSY_ARCH_ARM)
+#if defined(ARDUINO_ARCH_SAM)  || \
+    defined(ARDUINO_ARCH_SAMD) || \
+    defined(TEENSY_ARCH_ARM)
   // Check that the task can be allocated
   if (s_top + stackSize > STACK_MAX) return (false);
 #endif
