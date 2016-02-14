@@ -27,13 +27,16 @@ instance.
 
 ![screenshot](https://dl.dropboxusercontent.com/u/993383/Cosa/screenshots/Screenshot%20from%202016-01-29%2015%3A24%3A17.png)
 
+This library also includes support for task synchronization and
+communication; Semaphores, Queues and Channels.
+
 ## Install
 
 Download and unzip the Arduino-Scheduler library into your sketchbook
 libraries directory. Rename from Arduino-Scheduler-master to Scheduler.
 
 The Scheduler library and examples should be found in the Arduino IDE
-File>Sketchbook menu.
+File>Examples menu.
 
 ## Performance
 
