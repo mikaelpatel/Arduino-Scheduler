@@ -1,6 +1,6 @@
 /**
  * @file Scheduler.h
- * @version 1.0
+ * @version 1.2
  *
  * @section License
  * Copyright (C) 2015-2016, Mikael Patel
