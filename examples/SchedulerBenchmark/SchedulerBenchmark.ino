@@ -65,6 +65,10 @@
 
 #include <Scheduler.h>
 
+#if defined(ARDUINO_ARCH_SAMD)
+#define Serial SerialUSB
+#endif
+
 int counter = 0;
 
 void setup()
@@ -193,4 +197,3 @@ void incrementCounter()
   counter += 1;
   yield();
 }
-

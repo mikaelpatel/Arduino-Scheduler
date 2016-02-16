@@ -22,6 +22,12 @@
 
 #include <Scheduler.h>
 
+#if defined(ARDUINO_ARCH_SAMD)
+#define Serial SerialUSB
+#endif
+
+
+
 class Event {
 public:
   /**

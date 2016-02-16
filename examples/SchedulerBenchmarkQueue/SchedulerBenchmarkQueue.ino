@@ -30,6 +30,11 @@
 
 // const unsigned int QUEUE_MAX = 2;
 const unsigned int QUEUE_MAX = 8;
+
+#if defined(ARDUINO_ARCH_SAMD)
+#define Serial SerialUSB
+#endif
+
 typedef int event_t;
 Queue<event_t, QUEUE_MAX> queue;
 unsigned long count = 0;
