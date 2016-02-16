@@ -24,6 +24,11 @@
 #include <Scheduler.h>
 #include "Watchdog.h"
 
+// Check for SparkFun SAMD21 Breakout
+#if defined(ARDUINO_ARCH_SAMD) && (USB_PID == 0x8D21)
+#define Serial SerialUSB
+#endif
+
 unsigned long count = 0;
 
 void alarm(unsigned long ms)

@@ -23,6 +23,11 @@
 #include <Scheduler.h>
 #include "Debounce.h"
 
+// Check for SparkFun SAMD21 Breakout
+#if defined(ARDUINO_ARCH_SAMD) && (USB_PID == 0x8D21)
+#define Serial SerialUSB
+#endif
+
 const int BUTTON = 4;
 unsigned int count = 0;
 

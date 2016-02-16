@@ -22,6 +22,11 @@
 
 #include <Scheduler.h>
 
+// Check for SparkFun SAMD21 Breakout
+#if defined(ARDUINO_ARCH_SAMD) && (USB_PID == 0x8D21)
+#define Serial SerialUSB
+#endif
+
 const int LED = 13;
 volatile unsigned int period = 0;
 

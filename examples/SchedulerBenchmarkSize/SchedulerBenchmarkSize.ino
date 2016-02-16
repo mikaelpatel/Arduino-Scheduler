@@ -31,6 +31,12 @@
 
 #ifdef TASKS
 #include <Scheduler.h>
+
+// Check for SparkFun SAMD21 Breakout
+#if defined(ARDUINO_ARCH_SAMD) && (USB_PID == 0x8D21)
+#define Serial SerialUSB
+#endif
+
 #endif
 
 void setup()

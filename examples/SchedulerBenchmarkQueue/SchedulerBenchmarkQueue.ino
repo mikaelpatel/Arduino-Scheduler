@@ -28,6 +28,11 @@
 #include <Scheduler.h>
 #include <Scheduler/Queue.h>
 
+// Check for SparkFun SAMD21 Breakout
+#if defined(ARDUINO_ARCH_SAMD) && (USB_PID == 0x8D21)
+#define Serial SerialUSB
+#endif
+
 // const unsigned int QUEUE_MAX = 2;
 const unsigned int QUEUE_MAX = 8;
 typedef int event_t;

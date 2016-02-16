@@ -28,6 +28,11 @@
 #include <Scheduler.h>
 #include <Scheduler/Channel.h>
 
+// Check for SparkFun SAMD21 Breakout
+#if defined(ARDUINO_ARCH_SAMD) && (USB_PID == 0x8D21)
+#define Serial SerialUSB
+#endif
+
 // const size_t PAYLOAD_MAX = 1;
 const size_t PAYLOAD_MAX = 8;
 struct msg_t {
