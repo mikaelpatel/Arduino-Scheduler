@@ -33,7 +33,7 @@ communication; Semaphores, Queues and Channels.
 ## Install
 
 Download and unzip the Arduino-Scheduler library into your sketchbook
-libraries directory. Rename from Arduino-Scheduler-master to Scheduler.
+libraries directory. Rename from Arduino-Scheduler-master to Arduino-Scheduler.
 
 The Scheduler library and examples should be found in the Arduino IDE
 File>Examples menu.
