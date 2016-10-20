@@ -23,6 +23,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+//#define DEBUG_SCHEDULER 1
+
 class SchedulerClass {
 public:
   /**
@@ -106,6 +108,12 @@ protected:
   static const size_t DEFAULT_STACK_SIZE = 512;
   static const size_t STACK_MAX = 16384;
 
+#elif defined(ARDUINO_ARCH_ESP8266)
+
+  /** Default stack size and stack max. */
+  static const size_t DEFAULT_STACK_SIZE = 1024;
+  static const size_t STACK_MAX = 0x2000; // esp8266 Arduino reserves 4096bytes for the stack (heap starts 0x3FFF after the stack begin address)
+
 #else
 #error "Scheduler.h: board not supported"
 #endif
@@ -121,7 +129,9 @@ protected:
 };
 
 /** Scheduler single-ton. */
-extern SchedulerClass Scheduler;
+//extern SchedulerClass Scheduler;
+#define Scheduler sched()
+extern SchedulerClass& sched(void);
 
 /**
  * Syntactic sugar for scheduler based busy-wait for condition;
