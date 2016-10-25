@@ -71,10 +71,14 @@ size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 #if defined(ARDUINO_ARCH_ESP8266)
 extern "C" {
 #include "os_type.h"
+#include "signal.h"
+#include "user_interface.h"
 }
 
 #define LOOP_TASK_PRIORITY 1
 #define LOOP_QUEUE_SIZE    1
+
+//void handler (int signum) { printf("SIGNAL\n"); };
 
 extern "C" uint32_t system_get_time();
 extern "C" void preloop_update_frequency();
@@ -87,34 +91,88 @@ extern "C" void esp_scheduler(void){}
 
 extern "C" void optimistic_yield(uint32_t interval_us){}
 
-extern "C" void loop_task(os_event_t *events)
+extern "C" void delay(unsigned long interval_ms)
 {
-    g_micros_at_task_start = system_get_time();
+  uint32_t g_micros_at_task_start = system_get_time();
 
-    static bool one = true;
-    if(one)
+  while((system_get_time() - g_micros_at_task_start) < interval_ms*1000)
+  {
+      system_soft_wdt_feed();
+      yield();
+  }
+}
+
+extern "C" void delay_until(uint32_t clock)
+{
+    uint32_t current_clock;
+
+    while((current_clock = system_get_time()) < clock)
     {
-        one = false;
-        preloop_update_frequency();
-        if(!Scheduler.start(NULL, loop, 4096))
-        {
-            panic();
-        }
-        setup();
+        system_soft_wdt_feed();
+        yield();
     }
 
-    yield();
-
-    ets_post(LOOP_TASK_PRIORITY, 0, 0);
+    if((current_clock - clock) > 100)
+    {
+#ifdef DEBUG_SCHEDULER
+        printf_P(PSTR("deadline miss\n"));
+#endif
+    }
 }
+
+extern "C" unsigned int get_clock()
+{
+    return system_get_time();
+}
+
+extern "C" void loop_task(os_event_t *events)
+{
+  static bool one = true;
+
+  g_micros_at_task_start = system_get_time();
+
+  //signal (SIGSEGV, handler);
+
+  if(one)
+  {
+    one = false;
+
+    preloop_update_frequency();
+    Scheduler.begin(0x4000);
+    setup();
+
+    if(!Scheduler.start(NULL, loop, 3072))
+    {
+      panic();
+    }
+  }
+
+  yield();
+
+  ets_post(LOOP_TASK_PRIORITY, 0, 0);
+}
+
 #endif
 
 
 bool SchedulerClass::begin(size_t stackSize)
 {
-  // Set main task stack size
-  s_top = stackSize;
-  return (true);
+  static bool initiated = true;
+
+  if(initiated)
+  {
+    initiated = false;
+    // Set main task stack size
+    s_top = stackSize;
+  }
+
+#if defined(ARDUINO_ARCH_ESP8266)
+  // fill the remaining stack with a pattern
+  uint8_t * fr = (uint8_t*)RAMEND-STACK_MAX;
+  memset(fr, 0x08, STACK_MAX-stackSize);
+#endif
+
+  return true;
 }
 
 bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
@@ -129,8 +187,8 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   size_t frame = RAMEND - (size_t) &frame;
 
 #ifdef DEBUG_SCHEDULER
-  printf("%p\n", (size_t) &frame);
-  printf("s_top - frame=%u\n", s_top - frame);
+  printf_P(PSTR("%p\n"), (size_t) &frame);
+  printf_P(PSTR("s_top - frame=%u\n"), s_top - frame);
 #endif
 
   uint8_t stack[s_top - frame];

@@ -25,6 +25,11 @@
 
 //#define DEBUG_SCHEDULER 1
 
+#if defined(ARDUINO_ARCH_ESP8266)
+extern "C" unsigned int get_clock();
+extern "C" void delay_until(uint32_t clock_ms);
+#endif
+
 class SchedulerClass {
 public:
   /**
@@ -111,8 +116,8 @@ protected:
 #elif defined(ARDUINO_ARCH_ESP8266)
 
   /** Default stack size and stack max. */
-  static const size_t DEFAULT_STACK_SIZE = 1024;
-  static const size_t STACK_MAX = 0x2000; // esp8266 Arduino reserves 4096bytes for the stack (heap starts 0x3FFF after the stack begin address)
+  static const size_t DEFAULT_STACK_SIZE = 512;
+  static const size_t STACK_MAX = 0x2000 + 0x4000; // esp8266 Arduino reserves 4096bytes for the stack (heap starts 0x3FFF after the stack begin address)
 
 #else
 #error "Scheduler.h: board not supported"
