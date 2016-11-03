@@ -71,9 +71,10 @@ size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 #if defined(ARDUINO_ARCH_ESP8266)
 extern "C" {
 #include "os_type.h"
-#include "signal.h"
+//#include "signal.h"
 #include "user_interface.h"
 }
+#include "Scheduler/Semaphore.h"
 
 #define LOOP_TASK_PRIORITY 1
 #define LOOP_QUEUE_SIZE    1
@@ -85,11 +86,11 @@ extern "C" void preloop_update_frequency();
 
 static uint32_t g_micros_at_task_start = 0;
 
-extern "C" void esp_yield(void){}
+extern "C" void esp_yield(void){ yield(); }
 
 extern "C" void esp_scheduler(void){}
 
-extern "C" void optimistic_yield(uint32_t interval_us){}
+extern "C" void optimistic_yield(uint32_t interval_us){ yield(); }
 
 extern "C" void delay(unsigned long interval_ms)
 {
@@ -141,7 +142,7 @@ extern "C" void loop_task(os_event_t *events)
     Scheduler.begin(0x4000);
     setup();
 
-    if(!Scheduler.start(NULL, loop, 3072))
+    if(!Scheduler.start(NULL, loop, 0x1000))
     {
       panic();
     }
@@ -150,6 +151,18 @@ extern "C" void loop_task(os_event_t *events)
   yield();
 
   ets_post(LOOP_TASK_PRIORITY, 0, 0);
+}
+
+static Semaphore spiffs(1);
+
+extern "C" void esp_spiffs_lock(uint32_t* fs)
+{
+    spiffs.wait(1);
+}
+
+extern "C" void esp_spiffs_unlock(uint32_t* fs)
+{
+    spiffs.signal(1);
 }
 
 #endif

@@ -59,8 +59,8 @@ public:
    * @return bool.
    */
   static bool start(func_t taskSetup,
-		    func_t taskLoop,
-		    size_t stackSize = DEFAULT_STACK_SIZE);
+            func_t taskLoop,
+            size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
    * Context switch to next task in run queue.
