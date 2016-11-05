@@ -35,10 +35,24 @@ extern size_t __malloc_margin;
 
 #elif defined(ARDUINO_ARCH_SAMD)
 #define RAMEND 0x20008000
+
+#elif defined(ARDUINO_ARCH_ESP8266)
+// https://github.com/esp8266/esp8266-wiki/wiki/Memory-Map
+#define RAMSTART  0x3FFE8000
+#define RAMSIZE   0x18000
+#define RAMEND    RAMSTART + RAMSIZE - 1
+//#define RAMEND 0x3fffffb0
+
 #endif
 
+
 // Single-ton
-SchedulerClass Scheduler;
+//SchedulerClass Scheduler;
+SchedulerClass& sched(void)
+{
+  static SchedulerClass ans = SchedulerClass();
+  return ans;
+}
 
 // Main task and run queue
 SchedulerClass::task_t SchedulerClass::s_main = {
@@ -54,11 +68,124 @@ SchedulerClass::task_t* SchedulerClass::s_running = &SchedulerClass::s_main;
 // Initial top stack for task allocation
 size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
 
+#if defined(ARDUINO_ARCH_ESP8266)
+extern "C" {
+#include "os_type.h"
+//#include "signal.h"
+#include "user_interface.h"
+}
+#include "Scheduler/Semaphore.h"
+
+#define LOOP_TASK_PRIORITY 1
+#define LOOP_QUEUE_SIZE    1
+
+//void handler (int signum) { printf("SIGNAL\n"); };
+
+extern "C" uint32_t system_get_time();
+extern "C" void preloop_update_frequency();
+
+static uint32_t g_micros_at_task_start = 0;
+
+extern "C" void esp_yield(void){ yield(); }
+
+extern "C" void esp_scheduler(void){}
+
+extern "C" void optimistic_yield(uint32_t interval_us){ yield(); }
+
+extern "C" void delay(unsigned long interval_ms)
+{
+  uint32_t g_micros_at_task_start = system_get_time();
+
+  while((system_get_time() - g_micros_at_task_start) < interval_ms*1000)
+  {
+      system_soft_wdt_feed();
+      yield();
+  }
+}
+
+extern "C" void delay_until(uint32_t clock)
+{
+    uint32_t current_clock;
+
+    while((current_clock = system_get_time()) < clock)
+    {
+        system_soft_wdt_feed();
+        yield();
+    }
+
+    if((current_clock - clock) > 100)
+    {
+#ifdef DEBUG_SCHEDULER
+        printf_P(PSTR("deadline miss\n"));
+#endif
+    }
+}
+
+extern "C" unsigned int get_clock()
+{
+    return system_get_time();
+}
+
+extern "C" void loop_task(os_event_t *events)
+{
+  static bool one = true;
+
+  g_micros_at_task_start = system_get_time();
+
+  //signal (SIGSEGV, handler);
+
+  if(one)
+  {
+    one = false;
+
+    preloop_update_frequency();
+    Scheduler.begin(0x4000);
+    setup();
+
+    if(!Scheduler.start(NULL, loop, 0x1000))
+    {
+      panic();
+    }
+  }
+
+  yield();
+
+  ets_post(LOOP_TASK_PRIORITY, 0, 0);
+}
+
+static Semaphore spiffs(1);
+
+extern "C" void esp_spiffs_lock(uint32_t* fs)
+{
+    spiffs.wait(1);
+}
+
+extern "C" void esp_spiffs_unlock(uint32_t* fs)
+{
+    spiffs.signal(1);
+}
+
+#endif
+
+
 bool SchedulerClass::begin(size_t stackSize)
 {
-  // Set main task stack size
-  s_top = stackSize;
-  return (true);
+  static bool initiated = true;
+
+  if(initiated)
+  {
+    initiated = false;
+    // Set main task stack size
+    s_top = stackSize;
+  }
+
+#if defined(ARDUINO_ARCH_ESP8266)
+  // fill the remaining stack with a pattern
+  uint8_t * fr = (uint8_t*)RAMEND-STACK_MAX;
+  memset(fr, 0x08, STACK_MAX-stackSize);
+#endif
+
+  return true;
 }
 
 bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
@@ -71,6 +198,12 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
 
   // Allocate stack(s) and check if main stack top should be set
   size_t frame = RAMEND - (size_t) &frame;
+
+#ifdef DEBUG_SCHEDULER
+  printf_P(PSTR("%p\n"), (size_t) &frame);
+  printf_P(PSTR("s_top - frame=%u\n"), s_top - frame);
+#endif
+
   uint8_t stack[s_top - frame];
   if (s_main.stack == NULL) s_main.stack = stack;
 
@@ -87,7 +220,8 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
 
 #if defined(ARDUINO_ARCH_SAM)  || \
     defined(ARDUINO_ARCH_SAMD) || \
-    defined(TEENSY_ARCH_ARM)
+    defined(TEENSY_ARCH_ARM)   || \
+    defined(ARDUINO_ARCH_ESP8266)
   // Check that the task can be allocated
   if (s_top + stackSize > STACK_MAX) return (false);
 #endif
@@ -133,9 +267,7 @@ void SchedulerClass::init(func_t setup, func_t loop, const uint8_t* stack)
   }
 }
 
-extern "C"
-void yield(void)
+extern "C" void yield(void)
 {
   Scheduler.yield();
 }
-
