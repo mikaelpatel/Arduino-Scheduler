@@ -53,7 +53,7 @@ void setup()
   // Start a blink task for each pin (use 64 byte stack)
   int tasks = 0;
   const int TASKS_MAX = NUM_DIGITAL_PINS - 2;
-  while (tasks < TASKS_MAX && Scheduler.start(NULL, blink, 64)) tasks++;
+  while (tasks < TASKS_MAX && Scheduler.startLoop(blink, 64)) tasks++;
   Serial.print(millis());
   Serial.print(F(":setup::task="));
   Serial.println(tasks);

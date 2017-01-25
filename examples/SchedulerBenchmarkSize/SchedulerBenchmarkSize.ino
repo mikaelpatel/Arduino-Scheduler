@@ -47,7 +47,7 @@ void setup()
   Serial.flush();
 
 #ifdef TASKS
-  Scheduler.start(NULL, loop);
+  Scheduler.startLoop(loop);
 #endif
 }
 
@@ -55,5 +55,3 @@ void loop()
 {
   yield();
 }
-
-

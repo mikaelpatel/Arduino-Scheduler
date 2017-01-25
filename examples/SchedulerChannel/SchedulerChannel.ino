@@ -37,10 +37,10 @@ void setup()
   Serial.println(F("SchedulerChannel: started"));
   Serial.flush();
 
-  Scheduler.start(NULL, messageSender);
-  Scheduler.start(NULL, messageSender);
-  Scheduler.start(NULL, messageReceiver);
-  Scheduler.start(NULL, messageReceiver);
+  Scheduler.startLoop(messageSender);
+  Scheduler.startLoop(messageSender);
+  Scheduler.startLoop(messageReceiver);
+  Scheduler.startLoop(messageReceiver);
 }
 
 void loop()

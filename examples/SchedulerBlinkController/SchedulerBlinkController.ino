@@ -42,8 +42,8 @@ void setup()
   Serial.println(F(":LED off"));
   Serial.flush();
 
-  Scheduler.start(NULL, controllerLoop);
-  Scheduler.start(NULL, buttonLoop);
+  Scheduler.startLoop(controllerLoop);
+  Scheduler.startLoop(buttonLoop);
 }
 
 void loop()
@@ -99,5 +99,3 @@ void buttonLoop()
     period = 100;
   }
 }
-
-

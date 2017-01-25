@@ -38,8 +38,8 @@ void setup()
   Serial.flush();
 
   // Start two event handlers
-  Scheduler.start(NULL, eventHandler);
-  Scheduler.start(NULL, eventHandler);
+  Scheduler.startLoop(eventHandler);
+  Scheduler.startLoop(eventHandler);
 }
 
 void loop()

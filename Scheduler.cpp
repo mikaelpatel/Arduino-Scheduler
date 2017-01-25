@@ -35,6 +35,11 @@ extern size_t __malloc_margin;
 
 #elif defined(ARDUINO_ARCH_SAMD)
 #define RAMEND 0x20008000
+
+#elif defined(ARDUINO_ARCH_ESP8266)
+#define RAMSTART (0x3FFE8000)
+#define RAMSIZE (0x14000)
+#define RAMEND (RAMSTART + RAMSIZE - 1)
 #endif
 
 // Single-ton
@@ -83,11 +88,7 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
 
   // Adjust heap limit
   __malloc_heap_end = (char*) STACKSTART;
-#endif
-
-#if defined(ARDUINO_ARCH_SAM)  || \
-    defined(ARDUINO_ARCH_SAMD) || \
-    defined(TEENSY_ARCH_ARM)
+#else
   // Check that the task can be allocated
   if (s_top + stackSize > STACK_MAX) return (false);
 #endif
@@ -138,4 +139,3 @@ void yield(void)
 {
   Scheduler.yield();
 }
-

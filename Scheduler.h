@@ -56,6 +56,20 @@ public:
 		    size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
+   * Start a task with given taskLoop function and stack size. Should
+   * be called from main task (in setup). The taskLoop function is
+   * repeatedly called. Returns true if successful otherwise false.
+   * @param[in] taskLoop function.
+   * @param[in] stackSize in bytes.
+   * @return bool.
+   */
+  static bool startLoop(func_t taskLoop,
+			size_t stackSize = DEFAULT_STACK_SIZE)
+  {
+    return (start(NULL, taskLoop, stackSize));
+  }
+
+  /**
    * Context switch to next task in run queue.
    */
   static void yield();
@@ -84,7 +98,7 @@ protected:
     task_t* next;		//!< Next task.
     task_t* prev;		//!< Previous task.
     jmp_buf context;		//!< Task context.
-    const uint8_t* stack;	//!< Task stack.
+    const uint8_t* stack;	//!< Task stack top.
   };
 
 #if defined(TEENSYDUINO) && defined(__MK20DX256__)
@@ -105,6 +119,11 @@ protected:
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 512;
   static const size_t STACK_MAX = 16384;
+
+#elif defined(ARDUINO_ARCH_ESP8266)
+  /** Default stack size and stack max. */
+  static const size_t DEFAULT_STACK_SIZE = 512;
+  static const size_t STACK_MAX = 32768;
 
 #else
 #error "Scheduler.h: board not supported"

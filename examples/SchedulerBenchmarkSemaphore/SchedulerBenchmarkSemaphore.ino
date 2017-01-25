@@ -43,8 +43,8 @@ void setup()
   Serial.println(F("SchedulerBenchmarkSemaphore: started"));
   Serial.flush();
 
-  Scheduler.start(NULL, producer);
-  Scheduler.start(NULL, consumer);
+  Scheduler.startLoop(producer);
+  Scheduler.startLoop(consumer);
 }
 
 void loop()
