@@ -1,9 +1,9 @@
 /**
  * @file Scheduler.cpp
- * @version 1.2
+ * @version 1.3
  *
  * @section License
- * Copyright (C) 2015-2016, Mikael Patel
+ * Copyright (C) 2015-2017, Mikael Patel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,15 +25,20 @@
 #define TEENSY_ARCH_ARM
 #define RAMEND 0x20008000
 
+#elif defined(TEENSYDUINO) && defined(__MK66FX1M0__)
+#undef ARDUINO_ARCH_AVR
+#define TEENSY_ARCH_ARM
+#define RAMEND 0x20030000
+
 #elif defined(ARDUINO_ARCH_AVR)
 extern int __heap_start, *__brkval;
 extern char* __malloc_heap_end;
 extern size_t __malloc_margin;
 
-#elif defined(ARDUINO_ARCH_SAM)
+#elif defined(ARDUINO_ARCH_SAM) && !defined(RAMEND)
 #define RAMEND 0x20088000
 
-#elif defined(ARDUINO_ARCH_SAMD)
+#elif defined(ARDUINO_ARCH_SAMD) && !defined(RAMEND)
 #define RAMEND 0x20008000
 
 #elif defined(ARDUINO_ARCH_ESP8266)

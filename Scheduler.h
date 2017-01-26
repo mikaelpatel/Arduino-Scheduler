@@ -1,9 +1,9 @@
 /**
  * @file Scheduler.h
- * @version 1.2
+ * @version 1.3
  *
  * @section License
- * Copyright (C) 2015-2016, Mikael Patel
+ * Copyright (C) 2015-2017, Mikael Patel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -101,7 +101,7 @@ protected:
     const uint8_t* stack;	//!< Task stack top.
   };
 
-#if defined(TEENSYDUINO) && defined(__MK20DX256__)
+#if defined(TEENSYDUINO) && (defined(__MK20DX256__) || defined(__MK66FX1M0__))
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 512;
   static const size_t STACK_MAX = 16384;
