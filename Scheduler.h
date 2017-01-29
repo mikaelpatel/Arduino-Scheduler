@@ -102,7 +102,7 @@ protected:
     const uint8_t* stack;	//!< Task stack top.
   };
 
-#if defined(TEENSYDUINO) && (defined(__MK20DX256__) || defined(__MK66FX1M0__))
+#if defined(TEENSYDUINO) && (defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__))
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 512;
   static const size_t STACK_MAX = 16384;

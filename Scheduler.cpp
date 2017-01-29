@@ -25,6 +25,11 @@
 #define TEENSY_ARCH_ARM
 #define RAMEND 0x20008000
 
+#elif defined(TEENSYDUINO) && defined(__MK64FX512__)
+#undef ARDUINO_ARCH_AVR
+#define TEENSY_ARCH_ARM
+#define RAMEND 0x20020000
+
 #elif defined(TEENSYDUINO) && defined(__MK66FX1M0__)
 #undef ARDUINO_ARCH_AVR
 #define TEENSY_ARCH_ARM
