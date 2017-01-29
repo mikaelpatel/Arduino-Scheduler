@@ -22,8 +22,14 @@
 
 #include <Scheduler.h>
 
+#if defined(ARDUINO_ARCH_AVR)
+const size_t STACK_SIZE = 64;
+#else
+const size_t STACK_SIZE = 128;
+#endif
+
 int next_pin = 2;
-int stack;
+int min_stack = 64;
 
 void blink()
 {
@@ -31,11 +37,10 @@ void blink()
   int pin = next_pin++;
   pinMode(pin, OUTPUT);
 
-  // Capture stack available
-  stack = Scheduler.stack();
-
   // Toggle the pin on and off
   while (1) {
+    int bytes = Scheduler.stack();
+    if (bytes < min_stack) min_stack = bytes;
     digitalWrite(pin, HIGH);
     delay(500);
     digitalWrite(pin, LOW);
@@ -53,27 +58,34 @@ void setup()
   // Start a blink task for each pin (use 64 byte stack)
   int tasks = 0;
   const int TASKS_MAX = NUM_DIGITAL_PINS - 2;
-  while (tasks < TASKS_MAX && Scheduler.startLoop(blink, 64)) tasks++;
+  while (tasks < TASKS_MAX && Scheduler.startLoop(blink, STACK_SIZE)) tasks++;
   Serial.print(millis());
   Serial.print(F(":setup::task="));
   Serial.println(tasks);
 
-  // Run blink tasks startup and print stack available
-  yield();
   Serial.print(millis());
-  Serial.print(F(":setup::stack="));
-  Serial.println(stack);
+  Serial.print(F(":setup::main:stack="));
+  Serial.println(Scheduler.stack());
 }
 
 void loop()
 {
+  unsigned long start = millis();
+
   // Print the iteration count
   static unsigned int i = 0;
   Serial.print(millis());
   Serial.print(F(":loop::i="));
   Serial.println(i++);
 
+  Serial.print(millis());
+  Serial.print(F(":loop::main:stack="));
+  Serial.println(Scheduler.stack());
+
+  Serial.print(millis());
+  Serial.print(F(":loop::min:stack="));
+  Serial.println(min_stack);
+
   // Delay gracefully
-  unsigned long start = millis();
   await((millis() - start) >= 1000);
 }

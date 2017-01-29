@@ -27,6 +27,12 @@
 #define Serial SerialUSB
 #endif
 
+#if defined(ARDUINO_ARCH_AVR)
+const size_t STACK_SIZE = 64;
+#else
+const size_t STACK_SIZE = 128;
+#endif
+
 unsigned long count = 0L;
 
 void setup()
@@ -37,7 +43,7 @@ void setup()
   Serial.flush();
 
   int tasks = 0;
-  while (Scheduler.startLoop(counter, 64)) tasks++;
+  while (Scheduler.startLoop(counter, STACK_SIZE)) tasks++;
   Serial.print(millis());
   Serial.print(F(":setup::task="));
   Serial.println(tasks);

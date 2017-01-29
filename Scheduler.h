@@ -51,8 +51,7 @@ public:
    * @param[in] stackSize in bytes.
    * @return bool.
    */
-  static bool start(func_t taskSetup,
-		    func_t taskLoop,
+  static bool start(func_t taskSetup, func_t taskLoop,
 		    size_t stackSize = DEFAULT_STACK_SIZE);
 
   /**
@@ -75,7 +74,9 @@ public:
   static void yield();
 
   /**
-   * Return current task stack size.
+   * Return minimum remaining stack in bytes for running task.
+   * The value depends on executed function call depth and interrupt
+   * service routines during the execution sofar.
    * @return bytes
    */
   static size_t stack();

@@ -85,7 +85,7 @@ public:
     m_serving += 1;
 
     // Return size of received message
-    return (m_size);
+    return (res);
   }
 
 protected:

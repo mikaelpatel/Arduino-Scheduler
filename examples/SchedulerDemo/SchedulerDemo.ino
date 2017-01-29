@@ -55,6 +55,10 @@ void loop()
   Serial.print(F(":loop::i="));
   Serial.println(i++);
   delay(500);
+
+  Serial.print(millis());
+  Serial.print(F(":loop::stack="));
+  Serial.println(Scheduler.stack());
 }
 
 const int LED = 13;
@@ -79,6 +83,10 @@ void loop2()
   Serial.println(F(":loop2::led on"));
   digitalWrite(LED, HIGH);
   delay(1000);
+
+  Serial.print(millis());
+  Serial.print(F(":loop2::stack="));
+  Serial.println(Scheduler.stack());
 }
 
 void setup3()
@@ -139,5 +147,8 @@ void loop3()
     delay(500);
     buf = NULL;
   }
-}
 
+  Serial.print(millis());
+  Serial.print(F(":loop3::stack="));
+  Serial.println(Scheduler.stack());
+}

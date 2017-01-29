@@ -35,6 +35,7 @@ void setup()
   Serial.begin(57600);
   while (!Serial);
   Serial.println(F("SchedulerBlinkController: started"));
+  Serial.println(F("0 - stop, 1 - start controller"));
 
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);

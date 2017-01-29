@@ -40,12 +40,10 @@ extern size_t __malloc_margin;
 
 #elif defined(ARDUINO_ARCH_SAMD) && !defined(RAMEND)
 #define RAMEND 0x20008000
-
-#elif defined(ARDUINO_ARCH_ESP8266)
-#define RAMSTART (0x3FFE8000)
-#define RAMSIZE (0x14000)
-#define RAMEND (RAMSTART + RAMSIZE - 1)
 #endif
+
+// Stack magic pattern
+const uint8_t MAGIC = 0xa5;
 
 // Single-ton
 SchedulerClass Scheduler;
@@ -82,7 +80,10 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   // Allocate stack(s) and check if main stack top should be set
   size_t frame = RAMEND - (size_t) &frame;
   uint8_t stack[s_top - frame];
-  if (s_main.stack == NULL) s_main.stack = stack;
+  if (s_main.stack == NULL) {
+    s_main.stack = stack;
+    memset(stack, MAGIC, s_top - frame);
+  }
 
 #if defined(ARDUINO_ARCH_AVR)
   // Check that the task can be allocated
@@ -101,6 +102,9 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   // Adjust stack top for next task allocation
   s_top += stackSize;
 
+  // Fill stack with magic pattern to allow detect of stack depth
+  memset(stack - stackSize, MAGIC, stackSize - sizeof(task_t));
+
   // Initiate task with given functions and stack top
   init(taskSetup, taskLoop, stack - stackSize);
   return (true);
@@ -118,8 +122,10 @@ void SchedulerClass::yield()
 
 size_t SchedulerClass::stack()
 {
-  unsigned char marker;
-  return (&marker - s_running->stack);
+  size_t bytes = 0;
+  const uint8_t* sp = s_running->stack;
+  while (*sp++ == MAGIC) bytes++;
+  return (bytes);
 }
 
 void SchedulerClass::init(func_t setup, func_t loop, const uint8_t* stack)
