@@ -17,7 +17,27 @@
  *
  * @section Description
  * This Arduino sketch uses the Scheduler library.
- * Blink with max number of pins; 64 bytes per task.
+ * Blink with max number of pins; 64 (128) bytes per task.
+ *
+ * @section Serial Monitor Output (Arduino Mega 2560/IDE 1.8.1)
+ *
+ * SchedulerBlinkMax: started
+ * 7:setup::task=68
+ * 7:setup::main:stack=44
+ * 7:loop::i=0
+ * 8:loop::main:stack=44
+ * 9:loop::min:stack=64
+ * 1007:loop::i=1
+ * 1007:loop::main:stack=27
+ * 1008:loop::min:stack=31
+ * 2008:loop::i=2
+ * 2008:loop::main:stack=27
+ * 2008:loop::min:stack=15
+ * ...
+ *
+ * Note: It takes two iteration (seconds) to get a stable values.
+ * The stack head room is slowly reduced depending on call depth
+ * when ISR occurs.
  */
 
 #include <Scheduler.h>
