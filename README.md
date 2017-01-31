@@ -41,7 +41,9 @@ i.e. untouched stack space.
 int bytes = Scheduler.stack();
 ````
 The Scheduler member function stack() will scan the running task stack
-and determine how much has been used during the execution so far.
+and determine the minimum amount of remaining stack during the
+execution so far. The example sketch SchedulerBlinkMax shows how this
+can be used.
 
 ## Install
 
