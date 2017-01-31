@@ -49,7 +49,7 @@ const size_t STACK_SIZE = 128;
 #endif
 
 int next_pin = 2;
-int min_stack = 64;
+int min_stack = STACK_SIZE;
 
 void blink()
 {
