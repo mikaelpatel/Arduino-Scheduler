@@ -1,6 +1,6 @@
 /**
  * @file Scheduler.cpp
- * @version 1.3
+ * @version 1.4
  *
  * @section License
  * Copyright (C) 2015-2017, Mikael Patel
@@ -20,31 +20,30 @@
 #include <Arduino.h>
 
 // Configuration: SRAM and heap handling
-#if defined(TEENSYDUINO) && defined(__MK20DX256__)
+#if defined(TEENSYDUINO)
 #undef ARDUINO_ARCH_AVR
 #define TEENSY_ARCH_ARM
+#if defined(__MK20DX256__)
 #define RAMEND 0x20008000
-
-#elif defined(TEENSYDUINO) && defined(__MK64FX512__)
-#undef ARDUINO_ARCH_AVR
-#define TEENSY_ARCH_ARM
+#elif defined(__MK64FX512__)
 #define RAMEND 0x20020000
-
-#elif defined(TEENSYDUINO) && defined(__MK66FX1M0__)
-#undef ARDUINO_ARCH_AVR
-#define TEENSY_ARCH_ARM
+#elif defined(__MK66FX1M0__)
 #define RAMEND 0x20030000
+#endif
 
 #elif defined(ARDUINO_ARCH_AVR)
 extern int __heap_start, *__brkval;
 extern char* __malloc_heap_end;
 extern size_t __malloc_margin;
 
-#elif defined(ARDUINO_ARCH_SAM) && !defined(RAMEND)
+#elif defined(ARDUINO_ARCH_SAM)
+#if !defined(RAMEND)
 #define RAMEND 0x20088000
-
-#elif defined(ARDUINO_ARCH_SAMD) && !defined(RAMEND)
+#endif
+#elif defined(ARDUINO_ARCH_SAMD)
+#if !defined(RAMEND)
 #define RAMEND 0x20008000
+#endif
 #endif
 
 // Stack magic pattern
@@ -107,7 +106,7 @@ bool SchedulerClass::start(func_t taskSetup, func_t taskLoop, size_t stackSize)
   // Adjust stack top for next task allocation
   s_top += stackSize;
 
-  // Fill stack with magic pattern to allow detect of stack depth
+  // Fill stack with magic pattern to allow detect of stack usage
   memset(stack - stackSize, MAGIC, stackSize - sizeof(task_t));
 
   // Initiate task with given functions and stack top

@@ -1,6 +1,6 @@
 /**
  * @file Scheduler.h
- * @version 1.3
+ * @version 1.4
  *
  * @section License
  * Copyright (C) 2015-2017, Mikael Patel
@@ -76,7 +76,7 @@ public:
   /**
    * Return minimum remaining stack in bytes for running task.
    * The value depends on executed function call depth and interrupt
-   * service routines during the execution sofar.
+   * service routines during the execution (so far).
    * @return bytes
    */
   static size_t stack();
@@ -102,13 +102,24 @@ protected:
     const uint8_t* stack;	//!< Task stack top.
   };
 
-#if defined(TEENSYDUINO) && (defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__))
+#if defined(TEENSYDUINO)
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 512;
+#if defined(__MK20DX256__)
+  /** Teensy 3.2: 64 Kbyte. */
   static const size_t STACK_MAX = 16384;
+#elif defined(__MK64FX512__)
+  /** Teensy 3.5: 192 Kbyte. */
+  static const size_t STACK_MAX = 49152;
+#elif defined(__MK66FX1M0__)
+  /** Teensy 3.6: 256 Kbyte. */
+  static const size_t STACK_MAX = 65536;
+#else
+#error "Scheduler.h: Teensy board not supported"
+#endif
 
 #elif defined(ARDUINO_ARCH_AVR)
-  /** Default stack size. */
+  /** Default stack size. Stack max dynamically checked against heap end. */
   static const size_t DEFAULT_STACK_SIZE = 128;
 
 #elif defined(ARDUINO_ARCH_SAM)
@@ -121,13 +132,8 @@ protected:
   static const size_t DEFAULT_STACK_SIZE = 512;
   static const size_t STACK_MAX = 16384;
 
-#elif defined(ARDUINO_ARCH_ESP8266)
-  /** Default stack size and stack max. */
-  static const size_t DEFAULT_STACK_SIZE = 512;
-  static const size_t STACK_MAX = 32768;
-
 #else
-#error "Scheduler.h: board not supported"
+#error "Scheduler.h: Arduino board not supported"
 #endif
 
   /** Main task. */
