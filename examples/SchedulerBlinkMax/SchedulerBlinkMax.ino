@@ -17,7 +17,7 @@
  *
  * @section Description
  * This Arduino sketch uses the Scheduler library.
- * Blink with max number of pins; 64 (128) bytes per task.
+ * Blink with max number of pins; 64 (256) bytes per task.
  *
  * @section Output
  * IDE 1.8.1, Serial Monitor, Arduino Mega 2560
@@ -46,7 +46,7 @@
 #if defined(ARDUINO_ARCH_AVR)
 const size_t STACK_SIZE = 64;
 #else
-const size_t STACK_SIZE = 128;
+const size_t STACK_SIZE = 256;
 #endif
 
 int next_pin = 2;

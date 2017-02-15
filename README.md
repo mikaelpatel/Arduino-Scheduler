@@ -19,7 +19,7 @@ The tasks will start execution when the main task yields. The
 _taskSetup_ is called first and once by the task followed by repeated
 calls to _taskLoop_. This works just as the Arduino setup() and loop()
 functions. There is also an optional parameter, _taskStackSize_. The
-default value depends on the architecture (128 bytes for AVR and 512
+default value depends on the architecture (128 bytes for AVR and 1024
 bytes for SAM/SAMD/Teensy 3.X).
 
 ````
@@ -68,25 +68,3 @@ Sparkfun SAMD21 (48 MHz) | 2.60 | 125
 Arduino Due (84 MHz) | 1.36 | 115
 Teensy 3.1 (72 MHz) | 1.10 | 80
 Teensy 3.6 (180 MHz) | 0.43 | 78
-
-### Max Tasks (default stack size)
-
-Board | Tasks | Stack (bytes)
-------|-------|--------------
-Arduino Uno, Nano, Pro-Mini, etc (16 MHz) | 9 | 128
-Sparkfun SAMD21 (48 MHz) | 26 | 512
-Teensy 3.1 (72 MHz) | 26 | 512
-Teensy 3.6 (180 MHz) | 26 | 512
-Arduino Mega 2560 (16 MHz) | 48 | 128
-Arduino Due (84 MHz) | 52 | 512
-
-### Memory Footprint
-
-Board | PROGMEM | SRAM (bytes)
-------|---------|-------------
-Arduino Due (84 MHz) | 224 | NA
-Arduino Uno, Nano, Pro-Mini, etc (16 MHz) | 546 | 42
-Arduino Mega 2560 (16 MHz) | 548 | 44
-Sparkfun SAMD21 (48 MHz) | NA | NA
-Teensy 3.1 (72 MHz) | NA | NA
-Teensy 3.6 (180 MHz) | NA | NA
