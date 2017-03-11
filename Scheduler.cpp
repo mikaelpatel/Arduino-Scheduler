@@ -1,6 +1,6 @@
 /**
  * @file Scheduler.cpp
- * @version 1.4
+ * @version 1.5
  *
  * @section License
  * Copyright (C) 2015-2017, Mikael Patel
@@ -64,7 +64,7 @@ SchedulerClass::task_t SchedulerClass::s_main = {
 SchedulerClass::task_t* SchedulerClass::s_running = &SchedulerClass::s_main;
 
 // Initial top stack for task allocation
-size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_STACK_SIZE;
+size_t SchedulerClass::s_top = SchedulerClass::DEFAULT_MAIN_STACK_SIZE;
 
 bool SchedulerClass::begin(size_t stackSize)
 {
@@ -126,8 +126,8 @@ void SchedulerClass::yield()
 
 size_t SchedulerClass::stack()
 {
-  size_t bytes = 0;
   const uint8_t* sp = s_running->stack;
+  size_t bytes = 0;
   while (*sp++ == MAGIC) bytes++;
   return (bytes);
 }

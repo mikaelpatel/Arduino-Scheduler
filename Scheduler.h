@@ -1,6 +1,6 @@
 /**
  * @file Scheduler.h
- * @version 1.5
+ * @version 1.6
  *
  * @section License
  * Copyright (C) 2015-2017, Mikael Patel
@@ -33,7 +33,7 @@ public:
   /**
    * Initiate scheduler and main task with given stack size. Should
    * be called before start of any tasks if the main task requires a
-   * stack size other than the default size. Returns true if
+   * stack size other than the default main size. Returns true if
    * successful otherwise false.
    * @param[in] stackSize in bytes.
    * @return bool.
@@ -105,6 +105,7 @@ protected:
 #if defined(TEENSYDUINO)
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 1024;
+  static const size_t DEFAULT_MAIN_STACK_SIZE = 2048;
 #if defined(__MK20DX256__)
   /** Teensy 3.2: 64 Kbyte. */
   static const size_t STACK_MAX = 16384;
@@ -121,15 +122,18 @@ protected:
 #elif defined(ARDUINO_ARCH_AVR)
   /** Default stack size. Stack max dynamically checked against heap end. */
   static const size_t DEFAULT_STACK_SIZE = 128;
+  static const size_t DEFAULT_MAIN_STACK_SIZE = 256;
 
 #elif defined(ARDUINO_ARCH_SAM)
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 1024;
+  static const size_t DEFAULT_MAIN_STACK_SIZE = 2048;
   static const size_t STACK_MAX = 32768;
 
 #elif defined(ARDUINO_ARCH_SAMD)
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 1024;
+  static const size_t DEFAULT_MAIN_STACK_SIZE = 2048;
   static const size_t STACK_MAX = 16384;
 
 #else
