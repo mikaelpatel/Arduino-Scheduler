@@ -159,6 +159,6 @@ extern SchedulerClass Scheduler;
  * variable(s).
  * @param[in] cond condition to await.
  */
-#define await(cond) while (!(cond)) yield()
+#define await(cond) while (!(cond)) Scheduler.yield()
 
 #endif
