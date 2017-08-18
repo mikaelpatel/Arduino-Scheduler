@@ -46,7 +46,7 @@ public:
   void signal(unsigned int count = 1)
   {
     m_count += count;
-    yield();
+    Scheduler.yield();
   }
 
 protected:
