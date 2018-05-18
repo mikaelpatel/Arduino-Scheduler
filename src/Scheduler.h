@@ -122,8 +122,11 @@ protected:
 #elif defined(ARDUINO_ARCH_AVR)
   /** Default stack size. Stack max dynamically checked against heap end. */
   static const size_t DEFAULT_STACK_SIZE = 128;
+#if defined(USBCON)
+  static const size_t DEFAULT_MAIN_STACK_SIZE = 320;
+#else
   static const size_t DEFAULT_MAIN_STACK_SIZE = 256;
-
+#endif
 #elif defined(ARDUINO_ARCH_SAM)
   /** Default stack size and stack max. */
   static const size_t DEFAULT_STACK_SIZE = 1024;
