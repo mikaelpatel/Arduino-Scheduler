@@ -40,10 +40,17 @@ extern size_t __malloc_margin;
 #if !defined(RAMEND)
 #define RAMEND 0x20088000
 #endif
+
 #elif defined(ARDUINO_ARCH_SAMD)
 #if !defined(RAMEND)
 #define RAMEND 0x20008000
 #endif
+
+#elif defined(ARDUINO_ARCH_STM32F1)
+#if !defined(RAMEND)
+#define RAMEND 0x20005000
+#endif
+
 #endif
 
 // Stack magic pattern
