@@ -2,7 +2,7 @@
 
 This library implements an extended sub-set of the Arduino Scheduler
 class. Multiple loop() functions, tasks, may be started and run in a
-collaborative multi-tasking style. The tasks are run until they call
+cooperative multi-tasking style. The tasks are run until they call
 yield() or delay(). The Arduino yield() function is replaced by an
 implementation in the library that allows context switching.
 
@@ -29,8 +29,6 @@ A short hand version of start() is available when the taskSetup is NULL.
 
 The Scheduler is a single-ton and the library creates the single
 instance.
-
-![screenshot](https://dl.dropboxusercontent.com/u/993383/Cosa/screenshots/Screenshot%20from%202016-01-29%2015%3A24%3A17.png)
 
 This library also includes support for task synchronization and
 communication; Semaphores, Queues and Channels. There is also
